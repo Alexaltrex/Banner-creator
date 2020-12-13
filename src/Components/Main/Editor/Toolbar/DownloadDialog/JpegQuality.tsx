@@ -5,10 +5,15 @@ import {useDispatch, useSelector} from "react-redux";
 import {getJpegQuality} from "../../../../../Store/selectors/workspace-selectors";
 import {workspaceAC} from "../../../../../Store/reducers/workspace-reducer";
 import {Typography} from "@material-ui/core";
+import {translate} from "../../../../../Utils/lang";
+import {getLang} from "../../../../../Store/selectors/app-selectors";
 
 //============ CUSTOM HOOK ===============
 const useJpegQuality = () => {
     const jpegQuality = useSelector(getJpegQuality);
+    const lang = useSelector(getLang);
+    const label =  translate(lang, 'Quality of jpeg')
+
     const dispatch = useDispatch();
     const onChangeHandler = (e: any, value: number | number[]) => {
         dispatch(workspaceAC.setJpegQuality(value as number))
@@ -30,7 +35,7 @@ const useJpegQuality = () => {
     ];
     return {
         classes, jpegQuality, onChangeHandler,
-        marks
+        marks, label
     }
 };
 
@@ -38,11 +43,11 @@ const useJpegQuality = () => {
 const JpegQuality: React.FC<{}> = () => {
     const {
         classes, jpegQuality, onChangeHandler,
-        marks
+        marks, label
     } = useJpegQuality();
     return (
         <div className={classes.jpegQuality}>
-            <Typography>Quality of jpeg</Typography>
+            <Typography>{label}</Typography>
             <Slider className={classes.slider}
                     min={.1}
                     max={1}

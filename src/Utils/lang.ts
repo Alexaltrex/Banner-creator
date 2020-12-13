@@ -1,6 +1,7 @@
 import {LangType} from "../Types/types";
 import Button from "@material-ui/core/Button";
 import React from "react";
+import {Typography} from "@material-ui/core";
 
 
 export const Lang: LangObjectType = {
@@ -175,6 +176,10 @@ export const Lang: LangObjectType = {
     'Copy': {
         'eng': 'Copy',
         'rus': 'Копировать'
+    },
+    'Quality of jpeg': {
+        'eng': 'Quality of jpeg',
+        'rus': 'Качество jpeg'
     },
 };
 
