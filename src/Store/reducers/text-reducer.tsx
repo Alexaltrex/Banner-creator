@@ -6,40 +6,46 @@ import {XYCoord} from "react-dnd";
 const initialState = {
     texts: [] as Array<TextType>,
     selectedTextId: null as null | number, // id выделенного текста
+    showAlarm: false // показывать сообщение о предельно допустимом количестве строк текста
 };
 
 //=================== REDUCER ===========================
 const textReducer = (state = initialState, action: textActionsType): InitialStateType => {
     switch (action.type) {
         case 'BANNER_CREATOR/TEXT/ADD_TEXT': {
-            const id = state.texts.length ? state.texts[state.texts.length-1].id + 1 : 1;
-            const content = action.element === 'header' ? 'Header' : action.element === 'subheader' ? 'Subheader' : 'Body text';
-            const fontSize = action.element === 'header' ? 32 : action.element === 'subheader' ? 24 : 16;
-            const top = action.element === 'header' ? 10 : action.element === 'subheader' ? 52 : 86;
-            return {
-                ...state,
-                texts: [
-                    ...state.texts,
-                    {
-                        id: id,
-                        content: content,
-                        position: {
-                            top: top,
-                            left: 10
-                        },
-                        fontSize: fontSize,
-                        fontStyle: 'normal',
-                        fontFamily: 'arial',
-                        color: '#000',
-                        lowerCase: false,
-                        upperCase: false,
-                        hover: false,
-                        selected: false,
-                        editParameters: false,
-                        editText: false,
-                    }
-                ]
+            if (state.texts.length < 3) {
+                const id = state.texts.length ? state.texts[state.texts.length - 1].id + 1 : 1;
+                const content = action.element === 'header' ? 'Header' : action.element === 'subheader' ? 'Subheader' : 'Body text';
+                const fontSize = action.element === 'header' ? 32 : action.element === 'subheader' ? 24 : 16;
+                const top = action.element === 'header' ? 10 : action.element === 'subheader' ? 52 : 86;
+                return {
+                    ...state,
+                    texts: [
+                        ...state.texts,
+                        {
+                            id: id,
+                            content: content,
+                            position: {
+                                top: top,
+                                left: 10
+                            },
+                            fontSize: fontSize,
+                            fontStyle: 'normal',
+                            fontFamily: 'arial',
+                            color: '#000',
+                            lowerCase: false,
+                            upperCase: false,
+                            hover: false,
+                            selected: false,
+                            editParameters: false,
+                            editText: false,
+                        }
+                    ]
+                }
+            } else {
+                return {...state, showAlarm: true}
             }
+
         }
         case 'BANNER_CREATOR/TEXT/SET_HOVER': {
             return {
@@ -251,6 +257,9 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
                 ...state, texts: []
             }
         }
+        case 'BANNER_CREATOR/TEXT/SET_SHOW_ALARM': {
+            return {...state, showAlarm: action.showAlarm}
+        }
         default:
             return state;
     }
@@ -274,6 +283,7 @@ export const textAC = {
     setEditParameters: (id: number, editParameters: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_EDIT_PARAMETERS', id, editParameters} as const),
     setEditText: (id: number, editText: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_EDIT_TEXT', id, editText} as const),
     setSelectedTextId: (selectedTextId: number) => ({type: 'BANNER_CREATOR/TEXT/SET_SELECTED_TEXT_ID', selectedTextId} as const),
+    setShowAlarm: (showAlarm: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_SHOW_ALARM', showAlarm} as const),
 };
 
 //============== TYPE ==================

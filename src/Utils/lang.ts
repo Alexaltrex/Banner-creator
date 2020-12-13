@@ -2,6 +2,8 @@ import {LangType} from "../Types/types";
 import Button from "@material-ui/core/Button";
 import React from "react";
 import {Typography} from "@material-ui/core";
+import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
+import DialogContentText from "@material-ui/core/DialogContentText";
 
 
 export const Lang: LangObjectType = {
@@ -180,6 +182,14 @@ export const Lang: LangObjectType = {
     'Quality of jpeg': {
         'eng': 'Quality of jpeg',
         'rus': 'Качество jpeg'
+    },
+    'Maximum count of text': {
+        'eng': 'Maximum count of text',
+        'rus': 'Максимальное количество строк'
+    },
+    'Maximum count of text in trial version of banner creator is 3.': {
+        'eng': 'Maximum count of text in trial version of banner creator is 3.',
+        'rus': 'Максимальное количество строк в ознакомительной версии программы равно 3.'
     },
 };
 

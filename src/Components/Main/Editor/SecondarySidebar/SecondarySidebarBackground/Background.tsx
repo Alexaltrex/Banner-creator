@@ -7,7 +7,6 @@ import {useSelector} from "react-redux";
 import {getSecondarySidebarBackgroundTabIndex} from "../../../../../Store/selectors/editor-selectors";
 import {BackgroundTabIndexEnum} from "../../../../../Types/types";
 import Gradient from "./Gradient/Gradient";
-import Texture from "./Texture/Texture";
 import Image from "./Image/Image";
 import BackgroundBorder from "./BackgroundBorder";
 

@@ -10,6 +10,7 @@ import clsx from "clsx";
 import Toolbar from "./Toolbar/Toolbar";
 import Workspace from "./Workspace/Workspace";
 import grey from "@material-ui/core/colors/grey";
+import Alarm from "../../common/Alarm";
 
 //============ CUSTOM HOOK ====================
 const useEditor = () => {
@@ -37,6 +38,7 @@ const Editor:React.FC<{}> = () => {
                 <Toolbar/>
                 <Workspace/>
             </div>
+            <Alarm/>
         </div>
     )
 };
