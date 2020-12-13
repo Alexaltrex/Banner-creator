@@ -16,3 +16,4 @@ export const getCurrentImage = (state: StateType) => state.editor.backgroundStyl
 export const getScaleMode = (state: StateType) => state.editor.backgroundStyleImage.scaleMode;
 export const getAlign = (state: StateType) => state.editor.backgroundStyleImage.align;
 export const getCanvasUrl = (state: StateType) => state.editor.canvasUrl;
+export const getIsLoading = (state: StateType) => state.editor.isLoading;

@@ -31,6 +31,10 @@ const useHeader = () => {
         dispatch(editorAC.setUseBorder(false));
         dispatch(workspaceAC.setZoom(100));
         dispatch(textAC.removeTextAll());
+        dispatch(editorAC.setMainSidebarItem(0));
+        dispatch(editorAC.setSecondarySidebarBackgroundTabIndex(0));
+        dispatch(editorAC.setImageTabIndex(0));
+        dispatch(editorAC.setBorderColor('#000'));
     };
     return {
         classes, logo, createNewLabel, onCreateNewHandler

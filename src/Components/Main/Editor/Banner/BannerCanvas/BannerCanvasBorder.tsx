@@ -17,18 +17,19 @@ const useBannerCanvasBackground = () => {
     const borderColor = useSelector(getBorderColor);
     let canvasRef = useRef<HTMLCanvasElement | null>(null);
     let canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
+
     useEffect(() => {
         if (canvasRef.current && size.width && size.height) {
             canvasCtxRef.current = canvasRef.current.getContext('2d');
             let ctx = canvasCtxRef.current;
-            ctx!.clearRect(0, 0, size.width * zoom / 100, size.height * zoom / 100);
+            ctx!.clearRect(0, 0, size.width, size.height);
             ctx!.strokeStyle = borderColor;
             ctx!.lineWidth = 4;
-            ctx!.scale(zoom / 100, zoom / 100);
             ctx!.strokeRect(0, 0, size.width, size.height);
             dispatch(editorAC.setCanvasUrl('border', canvasRef.current.toDataURL()))
         }
-    }, [size, borderColor, zoom]);
+    }, [size, borderColor]);
+
     return {
         classes, size, canvasRef, zoom
     }
@@ -47,8 +48,12 @@ const BannerCanvasBorder: React.FC<{}> = (): ReactElement => {
                 <canvas
                     className={classes.bannerCanvasBorder}
                     ref={canvasRef}
-                    width={size.width * zoom / 100}
-                    height={size.height * zoom / 100}
+                    width={size.width}
+                    height={size.height}
+                    style={{
+                        transform: `scale(${zoom/100})`,
+                        transformOrigin: 'left top'
+                    }}
                 />
             }
         </>

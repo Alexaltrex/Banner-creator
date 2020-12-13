@@ -5,7 +5,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {textAC} from "../../../../../Store/reducers/text-reducer";
 import clsx from "clsx";
 import React, {useEffect, useRef} from "react";
-import {getRefLeftPanel} from "../../../../../Store/selectors/workspace-selectors";
+import {getRefLeftPanel, getZoom} from "../../../../../Store/selectors/workspace-selectors";
 import BannerTextForm from "./BannerTextForm";
 import {useDrag} from "react-dnd";
 import {ItemTypes} from "../../../../../DragAndDrop/Dnd";
@@ -13,11 +13,11 @@ import {ItemTypes} from "../../../../../DragAndDrop/Dnd";
 //==================== STYLED ===================
 const Span = styled.span`
     position: absolute;
-    top: ${(props: PropsSpanType) => `${props.top}px`};
-    left: ${(props: PropsSpanType) => `${props.left}px`};
+    top: ${(props: PropsSpanType) => `${props.top * props.zoom / 100}px`};
+    left: ${(props: PropsSpanType) => `${props.left * props.zoom / 100}px`};
     color: ${(props: PropsSpanType) => props.color};
-    font-size: ${(props: PropsSpanType) => `${props.fontSize}px`};
-    line-height: ${(props: PropsSpanType) => `${props.fontSize}px`};
+    font-size: ${(props: PropsSpanType) => `${props.fontSize * props.zoom / 100}px`};
+    line-height: ${(props: PropsSpanType) => `${props.fontSize * props.zoom / 100}px`};
     font-family: ${(props: PropsSpanType) => props.fontFamily};
     font-style: ${(props: PropsSpanType) => props.fontStyle};
     user-select: none;
@@ -28,6 +28,7 @@ const useBannerText = (text: TextType) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const wrapperRef = useRef(null);
+    const zoom = useSelector(getZoom);
 
     const onMouseEnterHandler = () => {
         dispatch(textAC.setHover(text.id, true))
@@ -100,7 +101,7 @@ const useBannerText = (text: TextType) => {
         classes, onMouseEnterHandler, onMouseLeaveHandler,
         onMouseDownHandler, onMouseUpHandler, wrapperRef,
         onClickHandler, onDoubleClickHandler,
-        isDragging, dragRef, content
+        isDragging, dragRef, content, zoom
     }
 };
 
@@ -110,7 +111,7 @@ const BannerCSSText: React.FC<PropsType> = ({text}) => {
         classes, onMouseEnterHandler, onMouseLeaveHandler,
         onMouseDownHandler, onMouseUpHandler, wrapperRef,
         onClickHandler, onDoubleClickHandler,
-        isDragging, dragRef, content
+        isDragging, dragRef, content, zoom
     } = useBannerText(text);
 
     if (isDragging) {
@@ -130,6 +131,7 @@ const BannerCSSText: React.FC<PropsType> = ({text}) => {
                   ref={dragRef}
                   top={text.position.top}
                   left={text.position.left}
+                  zoom={zoom}
                   onMouseEnter={onMouseEnterHandler}
                   onMouseLeave={onMouseLeaveHandler}
                   onMouseDown={onMouseDownHandler}
@@ -160,6 +162,7 @@ type PropsSpanType = {
     fontFamily: string
     fontStyle: string
     color: string
+    zoom: number
 }
 
 //================================ STYLES =======================================

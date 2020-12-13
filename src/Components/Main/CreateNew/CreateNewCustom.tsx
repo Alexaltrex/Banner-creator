@@ -83,7 +83,7 @@ const useCreateNewCustom = () => {
             width: +value.width,
             height: +value.height
         }));
-        dispatch(appAC.setIsCreated(true))
+        dispatch(appAC.setIsCreated(true));
     };
     const lang = useSelector(getLang);
     const buttonLabel = translate(lang, 'Create');
@@ -175,22 +175,33 @@ const useStyles = makeStyles({
     },
     cardActionArea: {
         height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-start'
+        //display: 'flex',
+        //flexDirection: 'column',
+        //justifyContent: 'flex-end',
+        position: 'relative'
     },
     icon: {
         transform: 'scale(3)'
     },
     graph: {
         width: '100%',
-        flexGrow: 1,
+        //flexGrow: 1,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: 110
     },
     description: {
         padding: 5,
+        height: 40,
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0
     },
     formWrapper: {
         height: '100%',

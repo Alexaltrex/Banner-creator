@@ -16,7 +16,7 @@ const Div = styled.div`
   width: ${(props: PropsType) => props.width ? `${props.width * props.zoom / 100}px` : '0px'};
   height: ${(props: PropsType) => props.height ? `${props.height * props.zoom / 100}px` : '0px'};
   position: relative;
-  margin: 50px;
+  //margin: 50px;
 `;
 
 //=================== CUSTOM HOOK =======================
@@ -29,7 +29,11 @@ const useBannerCanvasWrapper = () => {
         accept: ItemTypes.TEXT,
         drop(item: ItemType, monitor) {
             const positionCursorDifference = monitor.getDifferenceFromInitialOffset() as XYCoord;
-            dispatch(textAC.setPosition(item.id, positionCursorDifference))
+            const posDiffZoom = {
+                x: positionCursorDifference.x * 100 / zoom,
+                y: positionCursorDifference.y * 100 / zoom,
+            };
+            dispatch(textAC.setPosition(item.id, posDiffZoom as XYCoord))
         }
     });
     return {

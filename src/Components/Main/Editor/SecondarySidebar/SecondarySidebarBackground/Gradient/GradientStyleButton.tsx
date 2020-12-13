@@ -5,6 +5,8 @@ import clsx from "clsx";
 import {useDispatch, useSelector} from "react-redux";
 import {editorAC} from "../../../../../../Store/reducers/editor-reducer";
 import {getBackgroundStyle, getGradientStyle} from "../../../../../../Store/selectors/editor-selectors";
+import {getZoom} from "../../../../../../Store/selectors/workspace-selectors";
+import {workspaceAC} from "../../../../../../Store/reducers/workspace-reducer";
 
 //============ CUSTOM HOOK ====================
 const useGradientStyleButton = (gradientStyle: GradientStyleType) => {

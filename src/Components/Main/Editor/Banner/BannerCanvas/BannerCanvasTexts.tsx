@@ -4,6 +4,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getSize} from "../../../../../Store/selectors/editor-selectors";
 import {getTexts} from "../../../../../Store/selectors/text-selectors";
 import {editorAC} from "../../../../../Store/reducers/editor-reducer";
+import {getZoom} from "../../../../../Store/selectors/workspace-selectors";
 
 //============ CUSTOM HOOK ====================
 const useBannerCanvasTexts = () => {

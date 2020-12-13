@@ -40,7 +40,8 @@ const initialState = {
         background: null as null | string,
         border: null as null | string,
         text: null as null | string,
-    }
+    },
+    isLoading: false
 };
 //=================== REDUCER ===========================
 const editorReducer = (state = initialState, action: EditorActionsType): InitialStateType => {
@@ -177,6 +178,9 @@ const editorReducer = (state = initialState, action: EditorActionsType): Initial
                 }
             }
         }
+        case 'EDITOR/SET_IS_LOADING': {
+            return {...state, isLoading: action.isLoading}
+        }
         default:
             return state;
     }
@@ -233,6 +237,7 @@ export const editorAC = {
         layer,
         url
     } as const),
+    setIsLoading: (isLoading: boolean) => ({type: 'EDITOR/SET_IS_LOADING', isLoading} as const),
 };
 export default editorReducer;
 
@@ -247,6 +252,7 @@ const readUploadedFileAsUrl = (inputFile: File) => {
         };
 
         reader.onload = () => {
+
             resolve(reader.result);
         };
         reader.readAsDataURL(inputFile);
@@ -261,7 +267,7 @@ export const loadImage = (file: File): ThunkType => async (dispatch) => {
         if (typeof src === 'string') {
             dispatch(editorAC.addImage(src, name));
             dispatch(editorAC.setBackgroundStyle('image'));
-            dispatch(workspaceAC.setZoom(100));
+            //dispatch(workspaceAC.setZoom(100));
         }
 
     } catch(e) {

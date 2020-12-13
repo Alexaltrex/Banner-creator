@@ -15,7 +15,7 @@ const useImageTabs = () => {
     const imageTabIndex = useSelector(getImageTabIndex);
     const dispatch = useDispatch();
     const onChangeHandler = (event: React.ChangeEvent<{}>, newValue: number) => {
-        dispatch(editorAC.setImageTabIndex(newValue))
+        dispatch(editorAC.setImageTabIndex(newValue));
     };
     const lang = useSelector(getLang);
     const labels = [];

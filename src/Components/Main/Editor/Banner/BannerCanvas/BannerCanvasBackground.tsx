@@ -36,7 +36,6 @@ const useBannerCanvasBackground = () => {
             //========== COLOR ============
             if (backgroundStyle === 'color') {
                 ctx!.fillStyle = backgroundStyleColor.color;
-                ctx!.scale(zoom / 100, zoom / 100);
                 ctx!.fillRect(0, 0, size.width, size.height);
             }
             //========== GRADIENT ==========
@@ -51,192 +50,195 @@ const useBannerCanvasBackground = () => {
                         size.width / 2, size.height / 2, 0,
                         size.width / 2, size.height / 2, Math.sqrt((size.width * size.width) + (size.height * size.height)) / 2
                     );
-                };
-                ctx!.clearRect(0, 0, size.width * zoom / 100, size.height * zoom / 100);
+                }
+                ;
+                ctx!.clearRect(0, 0, size.width, size.height);
                 gradient.addColorStop(0, colorStart);
                 gradient.addColorStop(1, colorEnd);
                 ctx!.fillStyle = gradient;
-                ctx!.scale(zoom / 100, zoom / 100);
                 ctx!.fillRect(0, 0, size.width, size.height);
             }
             //============ IMAGE ===========
             if (backgroundStyle === 'image') {
                 if (currentImage) {
+                    const cw = size.width as number;
+                    const ch = size.height as number;
+                    dispatch(editorAC.setIsLoading(true));
                     const image = new Image();
-                    image.src = currentImage.src;
-                    const iw = image.width;
-                    const ih = image.height;
-                    const cw = size.width;
-                    const ch = size.height;
-                    let cx, cy, ix, iy;
-                    ctx!.clearRect(0, 0, size.width * zoom / 100, size.height * zoom / 100);
-                    ctx!.fillStyle = '#FFF';
-                    ctx!.scale(zoom / 100, zoom / 100);
-                    ctx!.fillRect(0, 0, cw, ch);
-                    //================= NO SCALE ================
-                    if (scaleMode === 'No scale') {
-                        cx = 0;
-                        cy = 0;
-                        ix = 0;
-                        iy = 0;
-                        switch (align) {
-                            case 'left-top': {
-                                ix = 0;
-                                iy = 0;
-                                break
-                            }
-                            case 'center-top': {
-                                ix = iw / 2 - cw / 2;
-                                iy = 0;
-                                break
-                            }
-                            case 'right-top': {
-                                ix = iw - cw;
-                                iy = 0;
-                                break
-                            }
-                            case 'left-center': {
-                                ix = 0;
-                                iy = ih / 2 - ch / 2;
-                                break
-                            }
-                            case 'center': {
-                                ix = iw / 2 - cw / 2;
-                                iy = ih / 2 - ch / 2;
-                                break
-                            }
-                            case 'right-center': {
-                                ix = iw - cw;
-                                iy = ih / 2 - ch / 2;
-                                break
-                            }
-                            case 'left-bottom': {
-                                ix = 0;
-                                iy = ih - ch;
-                                break
-                            }
-                            case 'center-bottom': {
-                                ix = iw / 2 - cw / 2;
-                                iy = ih - ch;
-                                break
-                            }
-                            case 'right-bottom': {
-                                ix = iw - cw;
-                                iy = ih - ch;
-                                break
-                            }
-                        }
-                        ctx!.drawImage(image, ix, iy, cw, ch, cx, cy, cw, ch);
-                        //================= EXCACT FIT ================
-                    } else if (scaleMode === 'Exact fit') {
-                        ctx!.drawImage(image, 0, 0, iw, ih, 0, 0, cw, ch);
-                        //================= MAINTAIN ASPECT ================
-                    } else if (scaleMode === 'Maintain aspect') {
-                        //console.log('Maintain aspect');
-                        if (iw / ih > cw / ch) { // изображение длиннее канваса
-                            const ch1 = cw * ih / iw;
+                    image.onload = () => {
+                        dispatch(editorAC.setIsLoading(false));
+                        const iw = image.width;
+                        const ih = image.height;
+
+                        let cx, cy, ix, iy;
+                        ctx!.clearRect(0, 0, cw, ch);
+                        ctx!.fillStyle = '#FFF';
+                        ctx!.fillRect(0, 0, cw, ch);
+                        //================= NO SCALE ================
+                        if (scaleMode === 'No scale') {
+                            cx = 0;
+                            cy = 0;
+                            ix = 0;
+                            iy = 0;
                             switch (align) {
-                                case 'left-top':
-                                case 'center-top':
-                                case 'right-top': {
-                                    cy = 0;
-                                    break
-                                }
-                                case 'left-center':
-                                case 'center':
-                                case 'right-center': {
-                                    cy = (ch - ch1) / 2;
-                                    break
-                                }
-                                case 'left-bottom':
-                                case 'center-bottom':
-                                case 'right-bottom': {
-                                    cy = ch - ch1;
-                                    break
-                                }
-                            }
-                            ctx!.drawImage(image, 10, 10, iw, ih, 0, cy, cw, ch1);
-                        } else if (iw / ih < cw / ch) {
-                            const cw1 = iw * ch / ih;
-                            switch (align) {
-                                case 'left-top':
-                                case 'left-center':
-                                case 'left-bottom': {
-                                    cx = 0;
-                                    break
-                                }
-                                case 'center-top':
-                                case 'center':
-                                case 'center-bottom': {
-                                    cx = (cw - cw1) / 2;
-                                    break
-                                }
-                                case 'right-top':
-                                case 'right-center':
-                                case 'right-bottom': {
-                                    cx = cw - cw1;
-                                    break
-                                }
-                                default:
-                                    cx = 0;
-                            }
-                            ctx!.drawImage(image, 0, 0, iw, ih, cx, 0, cw1, ch);
-                        } else { // iw / ih = cw / ch
-                            ctx!.drawImage(image, 0, 0, iw, ih, 0, 0, cw, ch);
-                        }
-                    } else if (scaleMode === 'Scale crop') {
-                        if (iw / ih > cw / ch) {
-                            const iw1 = ih * cw / ch;
-                            switch (align) {
-                                case 'left-top':
-                                case 'left-center':
-                                case 'left-bottom': {
+                                case 'left-top': {
                                     ix = 0;
-                                    break
-                                }
-                                case 'center-top':
-                                case 'center':
-                                case 'center-bottom': {
-                                    ix = (iw - iw1) / 2;
-                                    break
-                                }
-                                case 'right-top':
-                                case 'right-center':
-                                case 'right-bottom': {
-                                    ix = iw - iw1;
-                                    break
-                                }
-                                default:
-                                    ix = 0;
-                            }
-                            ctx!.drawImage(image, ix, 0, iw1, ih, 0, 0, cw, ch);
-                        } else if (iw / ih < cw / ch) {
-                            const ih1 = iw * ch / cw;
-                            switch (align) {
-                                case 'left-top':
-                                case 'center-top':
-                                case 'right-top': {
                                     iy = 0;
                                     break
                                 }
-                                case 'left-center':
-                                case 'center':
-                                case 'right-center': {
-                                    iy = (ih - ih1) / 2;
+                                case 'center-top': {
+                                    ix = iw / 2 - cw / 2;
+                                    iy = 0;
                                     break
                                 }
-                                case 'left-bottom':
-                                case 'center-bottom':
+                                case 'right-top': {
+                                    ix = iw - cw;
+                                    iy = 0;
+                                    break
+                                }
+                                case 'left-center': {
+                                    ix = 0;
+                                    iy = ih / 2 - ch / 2;
+                                    break
+                                }
+                                case 'center': {
+                                    ix = iw / 2 - cw / 2;
+                                    iy = ih / 2 - ch / 2;
+                                    break
+                                }
+                                case 'right-center': {
+                                    ix = iw - cw;
+                                    iy = ih / 2 - ch / 2;
+                                    break
+                                }
+                                case 'left-bottom': {
+                                    ix = 0;
+                                    iy = ih - ch;
+                                    break
+                                }
+                                case 'center-bottom': {
+                                    ix = iw / 2 - cw / 2;
+                                    iy = ih - ch;
+                                    break
+                                }
                                 case 'right-bottom': {
-                                    iy = ih - ih1;
+                                    ix = iw - cw;
+                                    iy = ih - ch;
                                     break
                                 }
                             }
-                            ctx!.drawImage(image, 0, iy, iw, ih1, 0, 0, cw, ch);
-                        } else { //iw / ih = cw / ch
+                            ctx!.drawImage(image, ix, iy, cw, ch, cx, cy, cw, ch);
+                            //================= EXACT FIT ================
+                        } else if (scaleMode === 'Exact fit') {
                             ctx!.drawImage(image, 0, 0, iw, ih, 0, 0, cw, ch);
+                            //================= MAINTAIN ASPECT ================
+                        } else if (scaleMode === 'Maintain aspect') {
+                            if (iw / ih > cw / ch) { // изображение длиннее канваса
+                                const ch1 = cw * ih / iw;
+                                switch (align) {
+                                    case 'left-top':
+                                    case 'center-top':
+                                    case 'right-top': {
+                                        cy = 0;
+                                        break
+                                    }
+                                    case 'left-center':
+                                    case 'center':
+                                    case 'right-center': {
+                                        cy = (ch - ch1) / 2;
+                                        break
+                                    }
+                                    case 'left-bottom':
+                                    case 'center-bottom':
+                                    case 'right-bottom': {
+                                        cy = ch - ch1;
+                                        break
+                                    }
+                                }
+                                ctx!.drawImage(image, 0, 0, iw, ih, 0, cy, cw, ch1);
+                            } else if (iw / ih < cw / ch) {
+                                const cw1 = iw * ch / ih;
+                                switch (align) {
+                                    case 'left-top':
+                                    case 'left-center':
+                                    case 'left-bottom': {
+                                        cx = 0;
+                                        break
+                                    }
+                                    case 'center-top':
+                                    case 'center':
+                                    case 'center-bottom': {
+                                        cx = (cw - cw1) / 2;
+                                        break
+                                    }
+                                    case 'right-top':
+                                    case 'right-center':
+                                    case 'right-bottom': {
+                                        cx = cw - cw1;
+                                        break
+                                    }
+                                    default:
+                                        cx = 0;
+                                }
+                                ctx!.drawImage(image, 0, 0, iw, ih, cx, 0, cw1, ch);
+                            } else { // iw / ih = cw / ch
+                                ctx!.drawImage(image, 0, 0, iw, ih, 0, 0, cw, ch);
+                            }
+                        } else if (scaleMode === 'Scale crop') {
+                            if (iw / ih > cw / ch) {
+                                const iw1 = ih * cw / ch;
+                                switch (align) {
+                                    case 'left-top':
+                                    case 'left-center':
+                                    case 'left-bottom': {
+                                        ix = 0;
+                                        break
+                                    }
+                                    case 'center-top':
+                                    case 'center':
+                                    case 'center-bottom': {
+                                        ix = (iw - iw1) / 2;
+                                        break
+                                    }
+                                    case 'right-top':
+                                    case 'right-center':
+                                    case 'right-bottom': {
+                                        ix = iw - iw1;
+                                        break
+                                    }
+                                    default:
+                                        ix = 0;
+                                }
+                                ctx!.drawImage(image, ix, 0, iw1, ih, 0, 0, cw, ch);
+                            } else if (iw / ih < cw / ch) {
+                                const ih1 = iw * ch / cw;
+                                switch (align) {
+                                    case 'left-top':
+                                    case 'center-top':
+                                    case 'right-top': {
+                                        iy = 0;
+                                        break
+                                    }
+                                    case 'left-center':
+                                    case 'center':
+                                    case 'right-center': {
+                                        iy = (ih - ih1) / 2;
+                                        break
+                                    }
+                                    case 'left-bottom':
+                                    case 'center-bottom':
+                                    case 'right-bottom': {
+                                        iy = ih - ih1;
+                                        break
+                                    }
+                                }
+                                ctx!.drawImage(image, 0, iy, iw, ih1, 0, 0, cw, ch);
+                            } else { //iw / ih = cw / ch
+                                ctx!.drawImage(image, 0, 0, iw, ih, 0, 0, cw, ch);
+                            }
                         }
-                    }
+                    };
+                    image.src = currentImage.src;
                 }
             }
             dispatch(editorAC.setCanvasUrl('background', canvasRef.current.toDataURL()))
@@ -244,7 +246,7 @@ const useBannerCanvasBackground = () => {
     }, [
         size, backgroundStyle, backgroundStyleColor,
         gradientStyle, colorStart, colorEnd, currentImage,
-        scaleMode, align, zoom
+        scaleMode, align
     ]);
     return {
         classes, size, canvasRef, zoom
@@ -264,8 +266,12 @@ const BannerCanvasBackground: React.FC<{}> = (): ReactElement => {
                 <canvas
                     className={classes.bannerCanvasBackground}
                     ref={canvasRef}
-                    width={size.width * zoom / 100}
-                    height={size.height * zoom / 100}
+                    width={size.width}
+                    height={size.height}
+                    style={{
+                        transform: `scale(${zoom / 100})`,
+                        transformOrigin: 'left top'
+                    }}
                 />
             }
         </>

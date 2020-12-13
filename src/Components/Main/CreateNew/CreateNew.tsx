@@ -51,6 +51,26 @@ const CreateNew: React.FC<{}> = (): ReactElement => {
             width: 250,
             height: 250
         },
+        {
+            label: 'Half Banner',
+            width: 234,
+            height: 60
+        },
+        {
+            label: 'Vertical Banner',
+            width: 120,
+            height: 240
+        },
+        {
+            label: 'Small Rectangle',
+            width: 180,
+            height: 150
+        },
+        {
+            label: 'Mobile Banner',
+            width: 300,
+            height: 50
+        },
     ];
     const CreateNewElements = sizes.map(
         (el, index) => <CreateNewItem key={index}

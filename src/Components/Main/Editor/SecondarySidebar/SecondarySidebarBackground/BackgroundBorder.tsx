@@ -32,6 +32,7 @@ const useBackgroundBorder = () => {
     const onChangeHandler = () => {
         if (useBorder) {
             dispatch(editorAC.setCanvasUrl('border', null))
+            dispatch(editorAC.setBorderColor('#000'));
         }
         dispatch(editorAC.setUseBorder(!useBorder))
     };

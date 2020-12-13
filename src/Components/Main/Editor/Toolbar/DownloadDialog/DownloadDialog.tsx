@@ -139,8 +139,6 @@ const DownloadDialog: React.FC<{}> = () => {
                                       value={html}
 
                             />
-
-
                         }
                     </>
                 }
@@ -161,6 +159,7 @@ const DownloadDialog: React.FC<{}> = () => {
                                       underline='none'
                                       href={canvasAllUrl as string}
                                       download={download}
+                                      className={classes.link}
                                 >
                                     {titleLabel}
                                 </Link>
@@ -168,6 +167,7 @@ const DownloadDialog: React.FC<{}> = () => {
                         </>
                         : <Typography variant='subtitle2'
                                       color='textSecondary'
+                                      className={classes.typography}
                         >
                             {titleLabel}
                         </Typography>
@@ -177,11 +177,13 @@ const DownloadDialog: React.FC<{}> = () => {
                     <Button onClick={onCopyHandler}
                             className={classes.button}
                             color="primary"
+                            variant='outlined'
                     >
                         {copyLabel}
                     </Button>
                 }
                 <Button onClick={onCloseHandler}
+                        variant='outlined'
                         className={classes.button}
                         color="primary">
                     {cancelLabel}
@@ -216,5 +218,18 @@ const useStyles = makeStyles({
         '&:focus': {
             border: '1px solid red'
         }
+    },
+    link: {
+        border: '1px solid rgba(63, 81, 181, 0.5)',
+        borderRadius: 4,
+        padding: '6px 15px',
+        '&:hover': {
+            border: '1px solid rgba(63, 81, 181, 1)',
+        }
+    },
+    typography: {
+        border: '1px solid #ccc',
+        borderRadius: 4,
+        padding: '6px 15px',
     }
 })
