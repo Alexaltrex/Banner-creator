@@ -29,12 +29,12 @@
 * Перетаскивание (drag and drop): react-dnd: v. 11.1.3
 
 ## Структура проекта
-assets - ресурсы;
-Components - react компоненты;
-css - стилизация для react-colorful;
-DrarAndDrop - константы для react-dnd;
-Store - управление глобальным состоянием (store, reducers, selectors);
-Types - типы typescript;
-Utils - утилиты (константы, перевод, валитаторы форм);
+* assets - ресурсы;
+* Components - react компоненты;
+* css - стилизация для react-colorful;
+* DrarAndDrop - константы для react-dnd;
+* Store - управление глобальным состоянием (store, reducers, selectors);
+* Types - типы typescript;
+* Utils - утилиты (константы, перевод, валитаторы форм);
 
 ## Структура приложения
