@@ -1,10 +1,11 @@
 import React from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import {Field, InjectedFormProps, reduxForm, submit} from "redux-form";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {textAC} from "../../../../../Store/reducers/text-reducer";
 import {TextType} from "../../../../../Types/types";
 import blue from "@material-ui/core/colors/blue";
+import {getZoom} from "../../../../../Store/selectors/workspace-selectors";
 
 //================= CUSTOM FORM HOOK =========================
 const useForm = (text: TextType) => {
@@ -12,11 +13,13 @@ const useForm = (text: TextType) => {
     const onChangeHandler = () => {
         setTimeout(() => dispatch(submit('text-form')));
     };
+    const zoom = useSelector(getZoom);
     const onBlurHandler = () => {
         dispatch(textAC.setEditText(text.id, false));
     };
     const props = {
-        text: text
+        text: text,
+        zoom: zoom
     };
     const classes = useStylesForm(props);
     return {
@@ -96,11 +99,11 @@ type ComponentPropsType = {
 
 //================= STYLES ================
 const useStylesForm = makeStyles({
-    form: (props: FormOwnPropsType) => ({
+    form: (props: {text: TextType, zoom: number}) => ({
         zIndex: 10,
         position: 'absolute',
-        top: props.text.position.top,
-        left: props.text.position.left,
+        top: props.text.position.top * props.zoom / 100,
+        left: props.text.position.left * props.zoom / 100,
     }),
     field: (props: FormOwnPropsType) => ({
         position: 'absolute',
