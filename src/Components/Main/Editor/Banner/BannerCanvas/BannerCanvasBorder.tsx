@@ -28,7 +28,7 @@ const useBannerCanvasBackground = () => {
             ctx!.strokeRect(0, 0, size.width, size.height);
             dispatch(editorAC.setCanvasUrl('border', canvasRef.current.toDataURL()))
         }
-    }, [size, borderColor]);
+    }, [size, borderColor, dispatch]);
 
     return {
         classes, size, canvasRef, zoom
@@ -59,7 +59,8 @@ const BannerCanvasBorder: React.FC<{}> = (): ReactElement => {
         </>
     )
 };
-export default BannerCanvasBorder;
+const BannerCanvasBorderMemo = React.memo(BannerCanvasBorder);
+export default BannerCanvasBorderMemo;
 
 //======================== STYLES ========================
 const useStyles = makeStyles({

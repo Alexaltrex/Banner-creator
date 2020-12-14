@@ -32,11 +32,11 @@ const useBannerCanvasBackground = () => {
         if (canvasRef.current && size.width && size.height) {
             canvasCtxRef.current = canvasRef.current.getContext('2d');
             let ctx = canvasCtxRef.current;
-
             //========== COLOR ============
             if (backgroundStyle === 'color') {
                 ctx!.fillStyle = backgroundStyleColor.color;
                 ctx!.fillRect(0, 0, size.width, size.height);
+                dispatch(editorAC.setCanvasUrl('background', canvasRef.current.toDataURL()))
             }
             //========== GRADIENT ==========
             if (backgroundStyle === 'gradient') {
@@ -50,13 +50,13 @@ const useBannerCanvasBackground = () => {
                         size.width / 2, size.height / 2, 0,
                         size.width / 2, size.height / 2, Math.sqrt((size.width * size.width) + (size.height * size.height)) / 2
                     );
-                }
-                ;
+                };
                 ctx!.clearRect(0, 0, size.width, size.height);
                 gradient.addColorStop(0, colorStart);
                 gradient.addColorStop(1, colorEnd);
                 ctx!.fillStyle = gradient;
                 ctx!.fillRect(0, 0, size.width, size.height);
+                dispatch(editorAC.setCanvasUrl('background', canvasRef.current.toDataURL()))
             }
             //============ IMAGE ===========
             if (backgroundStyle === 'image') {
@@ -237,16 +237,21 @@ const useBannerCanvasBackground = () => {
                                 ctx!.drawImage(image, 0, 0, iw, ih, 0, 0, cw, ch);
                             }
                         }
+
+                        // @ts-ignore
+                        dispatch(editorAC.setCanvasUrl('background', canvasRef.current.toDataURL()))
                     };
                     image.src = currentImage.src;
+
                 }
             }
-            dispatch(editorAC.setCanvasUrl('background', canvasRef.current.toDataURL()))
+            //dispatch(editorAC.setCanvasUrl('background', canvasRef.current.toDataURL()))
+            //console.log(canvasRef.current.toDataURL())
         }
     }, [
         size, backgroundStyle, backgroundStyleColor,
         gradientStyle, colorStart, colorEnd, currentImage,
-        scaleMode, align
+        scaleMode, align, dispatch
     ]);
     return {
         classes, size, canvasRef, zoom

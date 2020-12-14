@@ -4,7 +4,6 @@ import {useDispatch, useSelector} from "react-redux";
 import {getSize} from "../../../../../Store/selectors/editor-selectors";
 import {getTexts} from "../../../../../Store/selectors/text-selectors";
 import {editorAC} from "../../../../../Store/reducers/editor-reducer";
-import {getZoom} from "../../../../../Store/selectors/workspace-selectors";
 
 //============ CUSTOM HOOK ====================
 const useBannerCanvasTexts = () => {
@@ -32,13 +31,14 @@ const useBannerCanvasTexts = () => {
 
                 ctx!.fillStyle = texts[i].color;
                 ctx!.font = `${texts[i].fontStyle} ${texts[i].fontSize}px ${texts[i].fontFamily}`;
-                ctx!.fillText(content, texts[i].position.left, texts[i].position.top);
                 ctx!.textBaseline = 'top';
+                ctx!.fillText(content, texts[i].position.left, texts[i].position.top);
+
             }
 
             dispatch(editorAC.setCanvasUrl('text', canvasRef.current.toDataURL()))
         }
-    }, [texts]);
+    }, [texts, dispatch]);
 
     return {
         classes, size, canvasRef
@@ -74,6 +74,7 @@ const useStyles = makeStyles({
     bannerCanvasTexts: {
         position: 'absolute',
         top: 0,
-        left: 0
+        left: 0,
+        display: 'none'
     }
 });

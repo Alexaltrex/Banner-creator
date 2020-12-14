@@ -5,10 +5,10 @@ import {
     MainSidebarItemEnum, ScaleModeType,
     BackgroundTabIndexEnum,
     SizeType,
-    AlignType, ImageTabIndexEnum, ImageType
+    AlignType, ImageTabIndexEnum, ImageType, ImageItemType
 } from "../../Types/types";
 import {AppActionsType} from "./app-reducer";
-import {workspaceAC, WorkspaceActionsType} from "./workspace-reducer";
+import {WorkspaceActionsType} from "./workspace-reducer";
 
 const initialState = {
     size: { // размер баннера
@@ -45,146 +45,182 @@ const initialState = {
 };
 //=================== REDUCER ===========================
 const editorReducer = (state = initialState, action: EditorActionsType): InitialStateType => {
-    switch (action.type) {
-        case 'EDITOR/SET_SIZE': {
-            return {...state, size: action.size}
-        }
-        case 'EDITOR/SET_MAIN_SIDEBAR_ITEM': {
-            return {...state, mainSidebarItem: action.mainSidebarItem}
-        }
-        case 'EDITOR/SET_SHOW_SECOND_SIDEBAR': {
-            return {...state, showSecondSidebar: action.showSecondSidebar}
-        }
-        case 'EDITOR/SET_SECONDARY_SIDEBAR_BACKGROUND_TAB_INDEX': {
-            return {...state, secondarySidebarBackgroundTabIndex: action.secondarySidebarBackgroundTabIndex}
-        }
-        case 'EDITOR/SET_BACKGROUND_STYLE': {
-            return {...state, backgroundStyle: action.backgroundStyle}
-        }
-        case 'EDITOR/SET_BACKGROUND_STYLE_COLOR': {
-            return {...state, backgroundStyleColor: action.backgroundStyleColor}
-        }
-        case 'EDITOR/SET_USE_BORDER': {
-            return {...state, useBorder: action.useBorder}
-        }
-        case 'EDITOR/SET_BORDER_COLOR': {
-            return {...state, borderColor: action.borderColor}
-        }
-        case 'EDITOR/SET_GRADIENT_STYLE': {
-            return {
-                ...state,
-                backgroundStyleGradient: {
-                    ...state.backgroundStyleGradient,
-                    gradientStyle: action.gradientStyle
-                }
+        switch (action.type) {
+            case 'EDITOR/SET_SIZE': {
+                return {...state, size: action.size}
             }
-        }
-        case 'EDITOR/SET_COLOR_START': {
-            return {
-                ...state,
-                backgroundStyleGradient: {
-                    ...state.backgroundStyleGradient,
-                    colorStart: action.colorStart
-                }
+            case 'EDITOR/SET_MAIN_SIDEBAR_ITEM': {
+                return {...state, mainSidebarItem: action.mainSidebarItem}
             }
-        }
-        case 'EDITOR/SET_COLOR_END': {
-            return {
-                ...state,
-                backgroundStyleGradient: {
-                    ...state.backgroundStyleGradient,
-                    colorEnd: action.colorEnd
-                }
+            case 'EDITOR/SET_SHOW_SECOND_SIDEBAR': {
+                return {...state, showSecondSidebar: action.showSecondSidebar}
             }
-        }
-        case 'EDITOR/SET_REPLACE_COLOR': {
-            const colorStart = state.backgroundStyleGradient.colorStart;
-            const colorEnd = state.backgroundStyleGradient.colorEnd;
-            return {
-                ...state,
-                backgroundStyleGradient: {
-                    ...state.backgroundStyleGradient,
-                    colorEnd: colorStart,
-                    colorStart: colorEnd
-                }
+            case 'EDITOR/SET_SECONDARY_SIDEBAR_BACKGROUND_TAB_INDEX': {
+                return {...state, secondarySidebarBackgroundTabIndex: action.secondarySidebarBackgroundTabIndex}
             }
-        }
-        case 'EDITOR/ADD_IMAGE': { // добавить и установить текущим
-            if (state.backgroundStyleImage.images.find(//
-                el => el.name === action.name
-            )) {
-                return state
-            } else {
-                const length = state.backgroundStyleImage.images.length
-                const id = length === 0 ? 1 : state.backgroundStyleImage.images[length - 1].id + 1;
+            case 'EDITOR/SET_BACKGROUND_STYLE': {
+                return {...state, backgroundStyle: action.backgroundStyle}
+            }
+            case 'EDITOR/SET_BACKGROUND_STYLE_COLOR': {
+                return {...state, backgroundStyleColor: action.backgroundStyleColor}
+            }
+            case 'EDITOR/SET_USE_BORDER': {
+                return {...state, useBorder: action.useBorder}
+            }
+            case 'EDITOR/SET_BORDER_COLOR': {
+                return {...state, borderColor: action.borderColor}
+            }
+            case 'EDITOR/SET_GRADIENT_STYLE': {
                 return {
                     ...state,
-                    backgroundStyleImage: {
-                        ...state.backgroundStyleImage,
-                        images: [
-                            ...state.backgroundStyleImage.images,
-                            {
+                    backgroundStyleGradient: {
+                        ...state.backgroundStyleGradient,
+                        gradientStyle: action.gradientStyle
+                    }
+                }
+            }
+            case 'EDITOR/SET_COLOR_START': {
+                return {
+                    ...state,
+                    backgroundStyleGradient: {
+                        ...state.backgroundStyleGradient,
+                        colorStart: action.colorStart
+                    }
+                }
+            }
+            case 'EDITOR/SET_COLOR_END': {
+                return {
+                    ...state,
+                    backgroundStyleGradient: {
+                        ...state.backgroundStyleGradient,
+                        colorEnd: action.colorEnd
+                    }
+                }
+            }
+            case 'EDITOR/SET_REPLACE_COLOR': {
+                const colorStart = state.backgroundStyleGradient.colorStart;
+                const colorEnd = state.backgroundStyleGradient.colorEnd;
+                return {
+                    ...state,
+                    backgroundStyleGradient: {
+                        ...state.backgroundStyleGradient,
+                        colorEnd: colorStart,
+                        colorStart: colorEnd
+                    }
+                }
+            }
+            case 'EDITOR/ADD_IMAGE': { // добавить и установить текущим
+                if (state.backgroundStyleImage.images.find(//
+                    el => el.name === action.name
+                )) {
+                    return state
+                } else {
+                    const length = state.backgroundStyleImage.images.length
+                    const id = length === 0 ? 1 : state.backgroundStyleImage.images[length - 1].id + 1;
+                    return {
+                        ...state,
+                        backgroundStyleImage: {
+                            ...state.backgroundStyleImage,
+                            images: [
+                                ...state.backgroundStyleImage.images,
+                                {
+                                    id: id,
+                                    src: action.src,
+                                    name: action.name
+                                }
+                            ],
+                            currentImage: {
                                 id: id,
                                 src: action.src,
                                 name: action.name
                             }
-                        ],
-                        currentImage: {
-                            id: id,
-                            src: action.src,
-                            name: action.name
                         }
                     }
                 }
             }
-        }
-        case 'EDITOR/SET_CURRENT_IMAGE': {
-            const currentImage = state.backgroundStyleImage.images.find(el => el.id === action.id) as ImageType;
-            return {
-                ...state,
-                backgroundStyleImage: {
-                    ...state.backgroundStyleImage,
-                    currentImage: currentImage
+            case 'EDITOR/ADD_IMAGES': { // добавить и установить последний текущим
+                let stateImages = [...state.backgroundStyleImage.images];
+                for (let i = 0; i < action.images.length; i++) {
+                    if (stateImages.find(// если с таким именем уже есть
+                        el => el.name === action.images[i].name
+                    )) {
+                        //return state
+                    } else {// если с таким именем еще нет
+                        const id = stateImages.length === 0
+                            ? 1
+                            : stateImages[stateImages.length - 1].id + 1;
+                        stateImages = [
+                            ...stateImages,
+                            {
+                                id: id,
+                                src: action.images[i].src,
+                                name: action.images[i].name
+                            }
+                        ];
+                    }
+                }
+                return {
+                    ...state,
+                    backgroundStyleImage: {
+                        ...state.backgroundStyleImage,
+                        images: stateImages,
+                        currentImage: stateImages[stateImages.length - 1]
+                    }
                 }
             }
-        }
-        case 'EDITOR/SET_IMAGE_TAB_INDEX': {
-            return {...state, imageTabIndex: action.imageTabIndex}
-        }
-        case 'EDITOR/SET_SCALE_MODE': {
-            return {
-                ...state,
-                backgroundStyleImage: {
-                    ...state.backgroundStyleImage,
-                    scaleMode: action.scaleMode
+            case
+            'EDITOR/SET_CURRENT_IMAGE': {
+                const currentImage = state.backgroundStyleImage.images.find(el => el.id === action.id) as ImageType;
+                return {
+                    ...state,
+                    backgroundStyleImage: {
+                        ...state.backgroundStyleImage,
+                        currentImage: currentImage
+                    }
                 }
             }
-        }
-        case 'EDITOR/SET_ALIGN': {
-            return {
-                ...state,
-                backgroundStyleImage: {
-                    ...state.backgroundStyleImage,
-                    align: action.align
+            case 'EDITOR/SET_IMAGE_TAB_INDEX': {
+                return {...state, imageTabIndex: action.imageTabIndex}
+            }
+            case
+            'EDITOR/SET_SCALE_MODE': {
+                return {
+                    ...state,
+                    backgroundStyleImage: {
+                        ...state.backgroundStyleImage,
+                        scaleMode: action.scaleMode
+                    }
                 }
             }
-        }
-        case 'EDITOR/SET_CANVAS_URL': {
-            return {
-                ...state,
-                canvasUrl: {
-                    ...state.canvasUrl,
-                    [action.layer]: action.url
+            case
+            'EDITOR/SET_ALIGN': {
+                return {
+                    ...state,
+                    backgroundStyleImage: {
+                        ...state.backgroundStyleImage,
+                        align: action.align
+                    }
                 }
             }
+            case
+            'EDITOR/SET_CANVAS_URL': {
+                return {
+                    ...state,
+                    canvasUrl: {
+                        ...state.canvasUrl,
+                        [action.layer]: action.url
+                    }
+                }
+            }
+            case
+            'EDITOR/SET_IS_LOADING': {
+                return {...state, isLoading: action.isLoading}
+            }
+            default:
+                return state;
         }
-        case 'EDITOR/SET_IS_LOADING': {
-            return {...state, isLoading: action.isLoading}
-        }
-        default:
-            return state;
     }
-};
+;
 
 //=================== ACTION-CREATORS =====================
 export const editorAC = {
@@ -225,6 +261,7 @@ export const editorAC = {
     } as const),
     replaceColor: () => ({type: 'EDITOR/SET_REPLACE_COLOR'} as const),
     addImage: (src: string, name: string) => ({type: 'EDITOR/ADD_IMAGE', src, name} as const),
+    addImages: (images: Array<ImageItemType>) => ({type: 'EDITOR/ADD_IMAGES', images} as const),
     setImageTabIndex: (imageTabIndex: ImageTabIndexEnum) => ({
         type: 'EDITOR/SET_IMAGE_TAB_INDEX',
         imageTabIndex
@@ -232,7 +269,7 @@ export const editorAC = {
     setScaleMode: (scaleMode: ScaleModeType) => ({type: 'EDITOR/SET_SCALE_MODE', scaleMode} as const),
     setAlign: (align: AlignType) => ({type: 'EDITOR/SET_ALIGN', align} as const),
     setCurrentImage: (id: number) => ({type: 'EDITOR/SET_CURRENT_IMAGE', id} as const),
-    setCanvasUrl: (layer: 'background' | 'border' | 'text', url: null |string) => ({
+    setCanvasUrl: (layer: 'background' | 'border' | 'text', url: null | string) => ({
         type: 'EDITOR/SET_CANVAS_URL',
         layer,
         url
@@ -252,29 +289,46 @@ const readUploadedFileAsUrl = (inputFile: File) => {
         };
 
         reader.onload = () => {
-
             resolve(reader.result);
         };
         reader.readAsDataURL(inputFile);
     });
 };
 
-export const loadImage = (file: File): ThunkType => async (dispatch) => {
-    try {
-        const src = await readUploadedFileAsUrl(file);
-        const name = file.name;
+// export const loadImage = (file: File): ThunkType => async (dispatch) => {
+//     try {
+//         const src = await readUploadedFileAsUrl(file);
+//         const name = file.name;
+//
+//         if (typeof src === 'string') {
+//             dispatch(editorAC.addImage(src, name));
+//             dispatch(editorAC.setBackgroundStyle('image'));
+//         }
+//
+//     } catch (e) {
+//         console.log(e.message)
+//     }
+//
+// };
 
-        if (typeof src === 'string') {
-            dispatch(editorAC.addImage(src, name));
-            dispatch(editorAC.setBackgroundStyle('image'));
-            //dispatch(workspaceAC.setZoom(100));
+export const loadImages = (files: Array<File>): ThunkType => async (dispatch) => {
+    const images = [] as Array<ImageItemType>
+    for (let i = 0; i < files.length; i++) {
+        try {
+            const src = await readUploadedFileAsUrl(files[i]);
+            const name = files[i].name;
+            if (typeof src === 'string') {
+                //dispatch(editorAC.addImage(src, name));
+                images.push({src, name})
+                dispatch(editorAC.setBackgroundStyle('image'));
+            }
+        } catch (e) {
+            console.log(e.message)
         }
-
-    } catch(e) {
-        console.log(e.message)
     }
+    dispatch(editorAC.addImages(images));
 
-}
+};
 
 //============== TYPE ==================
 export type InitialStateType = typeof initialState;

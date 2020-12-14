@@ -48,23 +48,21 @@ const Header: React.FC<{}> = (): ReactElement => {
     } = useHeader();
 
     return (
-        <div className={classes.header}>
-            <Toolbar className={classes.toolBar}>
-                <Typography variant="h6" noWrap className={classes.logo}>
-                    {logo}
-                </Typography>
-                <HeaderLang/>
-                <Button color="inherit"
-                        variant='contained'
-                        startIcon={<AddIcon />}
-                        className={classes.button}
-                        onClick={onCreateNewHandler}
-                        component={RouterLink}
-                        to='/'>
-                    {createNewLabel}
-                </Button>
-            </Toolbar>
-        </div>
+        <Toolbar className={classes.header}>
+            <Typography variant="h6" noWrap className={classes.logo}>
+                {logo}
+            </Typography>
+            <HeaderLang/>
+            <Button color="inherit"
+                    variant='contained'
+                    startIcon={<AddIcon/>}
+                    className={classes.button}
+                    onClick={onCreateNewHandler}
+                    component={RouterLink}
+                    to='/'>
+                {createNewLabel}
+            </Button>
+        </Toolbar>
     );
 };
 export default Header;
@@ -74,13 +72,11 @@ const useStyles = makeStyles({
     header: {
         backgroundColor: brown[900],
         height: 64,
-        zIndex: 100
-    },
-    toolBar: {
-        maxWidth: 1000,
+        //zIndex: 100,
+        //maxWidth: 1000,
         width: '100%',
-        height: '100%',
-        margin: '0 auto',
+        //height: '100%',
+
         boxSizing: 'border-box',
         padding: '0 10px',
     },

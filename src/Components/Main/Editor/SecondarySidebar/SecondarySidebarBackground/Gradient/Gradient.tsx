@@ -15,7 +15,7 @@ const useGradient = () => {
 const Gradient: React.FC<{}> = (): ReactElement => {
     const {
         classes
-    } = useGradient()
+    } = useGradient();
     return (
         <div className={classes.gradient}>
             <GradientStyle/>

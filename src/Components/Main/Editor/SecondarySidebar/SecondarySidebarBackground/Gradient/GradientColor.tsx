@@ -1,12 +1,11 @@
 import React from "react";
 import {makeStyles} from "@material-ui/core";
-import IconButton from "@material-ui/core/IconButton";
-import CachedIcon from '@material-ui/icons/Cached';
 import SelectColorButtonCustom from "../../../../../common/SelectColorButtonCustom";
 import {useDispatch, useSelector} from "react-redux";
 import {getColorEnd, getColorStart} from "../../../../../../Store/selectors/editor-selectors";
 import {editorAC} from "../../../../../../Store/reducers/editor-reducer";
 import styled from "styled-components";
+import GradientColorInvert from "./GradientColorInvert";
 
 //===================== CUSTOM HOOK ===================
 const useGradientColor = () => {
@@ -20,28 +19,26 @@ const useGradientColor = () => {
     const onSelectColorEndHandler = (color: string) => {
         dispatch(editorAC.setColorEnd(color))
     };
-    const onClickHandler = () => {
-        dispatch(editorAC.replaceColor())
-    };
     return {
-        classes, colorStart, colorEnd, onClickHandler,
+        classes, colorStart, colorEnd,
         onSelectColorStartHandler, onSelectColorEndHandler
     }
 };
 
+//==================== STYLED ====================
 const GradientDiv = styled.div`
     height: 25px;
     margin-top: 5px;
     background: ${
-    (props: PropsType) =>  `linear-gradient(90deg, ${props.colorStart} 0%, ${props.colorEnd} 100%)`
+    (props: PropsType) => `linear-gradient(90deg, ${props.colorStart} 0%, ${props.colorEnd} 100%)`
 };
 `
 
 //==================== COMPONENT ======================
 const GradientColor: React.FC<{}> = () => {
     const {
-        classes, colorStart, colorEnd, onClickHandler,
-        onSelectColorStartHandler, onSelectColorEndHandler
+        classes, colorStart, colorEnd,
+        onSelectColorStartHandler, onSelectColorEndHandler,
     } = useGradientColor();
 
     return (
@@ -52,22 +49,20 @@ const GradientColor: React.FC<{}> = () => {
                     enable={true}
                     onPickColorHandler={onSelectColorStartHandler}
                     size={25}
-                    tipTitle='Select color'
+                    tipTitle='Select start color'
                     header='Select start color'
                     anchorOriginVertical='top'
                     anchorOriginHorizontal='left'
                     transformOriginVertical='top'
                     transformOriginHorizontal='left'
                 />
-                <IconButton size='small' onClick={onClickHandler}>
-                    <CachedIcon className={classes.icon}/>
-                </IconButton>
+                <GradientColorInvert/>
                 <SelectColorButtonCustom
                     color={colorEnd}
                     enable={true}
                     onPickColorHandler={onSelectColorEndHandler}
                     size={25}
-                    tipTitle='Select color'
+                    tipTitle='Select end color'
                     header='Select end color'
                     anchorOriginVertical='top'
                     anchorOriginHorizontal='right'
@@ -99,8 +94,5 @@ const useStyles = makeStyles({
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-    },
-    icon: {
-        color: 'white'
     },
 });

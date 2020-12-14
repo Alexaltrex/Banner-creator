@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import {useDispatch, useSelector} from "react-redux";
 import {getSize, getUseBorder} from "../../../../../Store/selectors/editor-selectors";
-import BannerCanvasBorder from "./BannerCanvasBorder";
 import {getZoom} from "../../../../../Store/selectors/workspace-selectors";
 import {ZoomType} from "../../../../../Types/types";
 import BannerCSSTexts from "../BannerCSS/BannerCSSTexts";
@@ -11,12 +10,12 @@ import {useDrop, XYCoord} from "react-dnd";
 import {ItemType, ItemTypes} from "../../../../../DragAndDrop/Dnd";
 import {textAC} from "../../../../../Store/reducers/text-reducer";
 import BannerCanvasTextsMemo from "./BannerCanvasTexts";
+import BannerCanvasBorderMemo from "./BannerCanvasBorder";
 
 const Div = styled.div`
   width: ${(props: PropsType) => props.width ? `${props.width * props.zoom / 100}px` : '0px'};
   height: ${(props: PropsType) => props.height ? `${props.height * props.zoom / 100}px` : '0px'};
-  position: relative;
-  //margin: 50px;
+  position: relative;  
 `;
 
 //=================== CUSTOM HOOK =======================
@@ -53,11 +52,11 @@ const BannerCanvasWrapper: React.FC<{}> = () => {
              ref={dropRef}
         >
             <BannerCanvasBackgroundMemo/>
-            <BannerCanvasTextsMemo/>
             {
                 useBorder &&
-                <BannerCanvasBorder/>
+                <BannerCanvasBorderMemo/>
             }
+            <BannerCanvasTextsMemo />
             <BannerCSSTexts/>
         </Div>
     )

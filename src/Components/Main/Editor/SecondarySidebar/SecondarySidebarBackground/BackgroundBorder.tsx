@@ -14,9 +14,9 @@ import withStyles from "@material-ui/core/styles/withStyles";
 const WhiteCheckbox = withStyles({
     root: {
         color: 'white',
-        '&$checked': {
-            color: 'white',
-        },
+        // '&$checked': {
+        //     color: 'white',
+        // },
     }
 })((props: CheckboxProps) => <Checkbox color="default" {...props} />);
 
@@ -111,8 +111,8 @@ const useStyles = makeStyles({
     },
     checkbox: {
         color: 'white',
-        '&$checked': {
-            color: 'white'
-        }
+        // '&$checked': {
+        //     color: 'white'
+        // }
     },
 });

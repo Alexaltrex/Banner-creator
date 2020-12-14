@@ -1,10 +1,4 @@
 import {LangType} from "../Types/types";
-import Button from "@material-ui/core/Button";
-import React from "react";
-import {Typography} from "@material-ui/core";
-import DialogTitle from "@material-ui/core/DialogTitle/DialogTitle";
-import DialogContentText from "@material-ui/core/DialogContentText";
-
 
 export const Lang: LangObjectType = {
     'English': {
@@ -61,7 +55,7 @@ export const Lang: LangObjectType = {
     },
     'Image': {
         'eng': 'Image',
-        'rus': 'Картинка'
+        'rus': 'Изображение'
     },
     'Default presets': {
         'eng': 'Default presets',
@@ -97,7 +91,7 @@ export const Lang: LangObjectType = {
     },
     'My images': {
         'eng': 'My images',
-        'rus': 'Мои'
+        'rus': 'Мои изображения'
     },
     'Stock photos': {
         'eng': 'Stock photos',
@@ -190,6 +184,34 @@ export const Lang: LangObjectType = {
     'Maximum count of text in trial version of banner creator is 3.': {
         'eng': 'Maximum count of text in trial version of banner creator is 3.',
         'rus': 'Максимальное количество строк в ознакомительной версии программы равно 3.'
+    },
+    'Drag and drop some files here,': {
+        'eng': 'Drag and drop some files here,',
+        'rus': 'Перетащите файл(ы)'
+    },
+    'or click to select files': {
+        'eng': 'or click to select files',
+        'rus': 'или кликните чтобы выбрать'
+    },
+    'By url': {
+        'eng': 'By url',
+        'rus': 'По ссылке'
+    },
+    'Horizontal gradient': {
+        'eng': 'Horizontal gradient',
+        'rus': 'Горизонтальный градиент'
+    },
+    'Vertical gradient': {
+        'eng': 'Vertical gradient',
+        'rus': 'Вертикальный градиент'
+    },
+    'Radial gradient': {
+        'eng': 'Radial gradient',
+        'rus': 'Радиальный градиент'
+    },
+    'Invert colors': {
+        'eng': 'Invert colors',
+        'rus': 'Поменять цвета'
     },
 };
 

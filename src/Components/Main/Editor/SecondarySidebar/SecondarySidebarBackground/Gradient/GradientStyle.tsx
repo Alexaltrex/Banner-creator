@@ -17,9 +17,9 @@ const GradientStyle: React.FC<{}> = (): ReactElement => {
     } = useGradientStyle()
     return (
         <div className={classes.gradientStyle}>
-            <GradientStyleButton gradientStyle='horizontal'/>
-            <GradientStyleButton gradientStyle='vertical'/>
-            <GradientStyleButton gradientStyle='radial'/>
+            <GradientStyleButton gradientStyle='horizontal' tip='Horizontal gradient'/>
+            <GradientStyleButton gradientStyle='vertical' tip='Vertical gradient'/>
+            <GradientStyleButton gradientStyle='radial' tip='Radial gradient'/>
         </div>
     )
 };

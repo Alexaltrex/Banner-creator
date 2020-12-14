@@ -16,7 +16,7 @@ const useForm = (valid: boolean) => {
     const classes = useStyles();
     useEffect(() => {
         dispatch(workspaceAC.setLinkFormIsValid(valid));
-    }, [valid]);
+    }, [valid, dispatch]);
     return {
         onChangeHandler, classes
     }

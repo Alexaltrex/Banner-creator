@@ -1,6 +1,5 @@
 import React, {ReactElement, useEffect} from 'react';
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import indigo from "@material-ui/core/colors/indigo";
 import Header from "./Components/Header/Header";
 import Main from "./Components/Main/Main";
 

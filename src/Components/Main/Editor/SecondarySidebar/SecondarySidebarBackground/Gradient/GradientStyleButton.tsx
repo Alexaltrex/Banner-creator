@@ -5,15 +5,18 @@ import clsx from "clsx";
 import {useDispatch, useSelector} from "react-redux";
 import {editorAC} from "../../../../../../Store/reducers/editor-reducer";
 import {getBackgroundStyle, getGradientStyle} from "../../../../../../Store/selectors/editor-selectors";
-import {getZoom} from "../../../../../../Store/selectors/workspace-selectors";
-import {workspaceAC} from "../../../../../../Store/reducers/workspace-reducer";
+import {Tooltip} from "@material-ui/core";
+import {getLang} from "../../../../../../Store/selectors/app-selectors";
+import {translate} from "../../../../../../Utils/lang";
 
 //============ CUSTOM HOOK ====================
-const useGradientStyleButton = (gradientStyle: GradientStyleType) => {
+const useGradientStyleButton = (gradientStyle: GradientStyleType, tip: string) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const gradientStyleFromState = useSelector(getGradientStyle);
     const backgroundStyle = useSelector(getBackgroundStyle);
+    const lang = useSelector(getLang);
+    const tipLabel = translate(lang, tip)
 
     const onClickHandler = () => {
         dispatch(editorAC.setBackgroundStyle('gradient'));
@@ -21,21 +24,26 @@ const useGradientStyleButton = (gradientStyle: GradientStyleType) => {
     };
     return {
         classes, onClickHandler, gradientStyleFromState,
-        backgroundStyle
+        backgroundStyle, tipLabel
     }
 };
 
 //============== COMPONENT =================
 const GradientStyleButton: React.FC<PropsType> = (props) => {
     const {
-        gradientStyle
+        gradientStyle, tip
     } = props;
     const {
         classes, onClickHandler, gradientStyleFromState,
-        backgroundStyle
-    } = useGradientStyleButton(gradientStyle);
+        backgroundStyle, tipLabel
+    } = useGradientStyleButton(gradientStyle, tip);
 
     return (
+        <Tooltip title={tipLabel} placement="right" arrow
+                 classes={{
+                     tooltip: classes.tooltip,
+                     arrow: classes.arrow
+                 }}>
         <div onClick={onClickHandler}
              className={clsx(
                  classes.gradientStyleButton,
@@ -44,6 +52,7 @@ const GradientStyleButton: React.FC<PropsType> = (props) => {
                  gradientStyle === 'radial' && classes.radial,
                  backgroundStyle === 'gradient' && gradientStyleFromState === gradientStyle && classes.selected
              )}/>
+        </Tooltip>
     )
 };
 export default GradientStyleButton;
@@ -51,6 +60,7 @@ export default GradientStyleButton;
 //================= TYPE =============
 type PropsType = {
     gradientStyle: GradientStyleType
+    tip: string
 }
 
 //========================== STYLES ================================================
@@ -73,6 +83,12 @@ const useStyles = makeStyles({
     },
     selected: {
         outline: '2px solid #FFF'
+    },
+    tooltip: {
+        backgroundColor: '#000'
+    },
+    arrow: {
+        color: '#000'
     }
 });
 

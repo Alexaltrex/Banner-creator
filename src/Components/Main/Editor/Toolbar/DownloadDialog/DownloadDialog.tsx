@@ -53,23 +53,33 @@ const useDownloadDialog = () => {
     canvasAll.width = size.width as number;
     canvasAll.height = size.height as number;
     const ctxAll = canvasAll.getContext('2d');
+
     const imgBackground = new Image();
+    // imgBackground.onload = () => {
+    //     ctxAll!.drawImage(imgBackground, 0, 0);
+    // };
     imgBackground.src = canvasUrl.background as string;
     ctxAll!.drawImage(imgBackground, 0, 0);
 
     if (canvasUrl.border) {
         const imgBorder = new Image();
+        // imgBorder.onload = () => {
+        //     ctxAll!.drawImage(imgBorder, 0, 0);
+        // };
         imgBorder.src = canvasUrl.border as string;
         ctxAll!.drawImage(imgBorder, 0, 0);
     }
 
     const imgText = new Image();
+    // imgText.onload = () => {
+    //     ctxAll!.drawImage(imgText, 0, 0);
+    // };
     imgText.src = canvasUrl.text as string;
     ctxAll!.drawImage(imgText, 0, 0);
 
     //if (downloadCase === 'PNG') {
     canvasAllUrl = canvasAll.toDataURL();
-    download = `${fileName}.png`
+    download = `${fileName}.png`;
     //}
     if (downloadCase === 'JPEG') {
         canvasAllUrl = canvasAll.toDataURL('image/jpeg', jpegQuality);
@@ -134,6 +144,7 @@ const DownloadDialog: React.FC<{}> = () => {
                         {
                             linkFormIsValid &&
                             <textarea ref={textareaRef}
+                                      readOnly
                                       className={classes.textarea}
                                       rows={4}
                                       value={html}
@@ -158,6 +169,7 @@ const DownloadDialog: React.FC<{}> = () => {
                                 <Link variant='subtitle2'
                                       underline='none'
                                       href={canvasAllUrl as string}
+                                      onClick={onCloseHandler}
                                       download={download}
                                       className={classes.link}
                                 >
