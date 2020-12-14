@@ -105,11 +105,11 @@ const useStylesForm = makeStyles({
         top: props.text.position.top * props.zoom / 100,
         left: props.text.position.left * props.zoom / 100,
     }),
-    field: (props: FormOwnPropsType) => ({
+    field: (props: {text: TextType, zoom: number}) => ({
         position: 'absolute',
-        fontSize: props.text.fontSize,
+        fontSize: props.text.fontSize * props.zoom / 100,
         fontFamily: props.text.fontFamily,
-        lineHeight: `${props.text.fontSize}px`,
+        lineHeight: `${props.text.fontSize * props.zoom / 100}px`,
         color: props.text.color,
         top: 0,
         left: 0,
