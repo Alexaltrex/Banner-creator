@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Banner-creator/static/css/main.5f8aec20.chunk.css",
-    "main.js": "/Banner-creator/static/js/main.6a80a816.chunk.js",
-    "main.js.map": "/Banner-creator/static/js/main.6a80a816.chunk.js.map",
+    "main.js": "/Banner-creator/static/js/main.ebface39.chunk.js",
+    "main.js.map": "/Banner-creator/static/js/main.ebface39.chunk.js.map",
     "runtime-main.js": "/Banner-creator/static/js/runtime-main.046beab9.js",
     "runtime-main.js.map": "/Banner-creator/static/js/runtime-main.046beab9.js.map",
     "static/js/2.4ce10d1c.chunk.js": "/Banner-creator/static/js/2.4ce10d1c.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.046beab9.js",
     "static/js/2.4ce10d1c.chunk.js",
     "static/css/main.5f8aec20.chunk.css",
-    "static/js/main.6a80a816.chunk.js"
+    "static/js/main.ebface39.chunk.js"
   ]
 }
