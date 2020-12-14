@@ -1,7 +1,7 @@
 # Banner-creator
 Ссылка: https://alexaltrex.github.io/Banner-creator
-<img src="src/assets/img/00.jpg" width="800">
 
+<img src="src/assets/img/00.jpg" width="600">
 
 ## Описание
 Редактор для создания баннеров.
