@@ -9,5 +9,7 @@ export const getFileNameFormIsValid = (state: StateType) => state.workspace.file
 export const getJpegQuality = (state: StateType) => state.workspace.jpegQuality;
 export const getLink = (state: StateType) => state.workspace.link;
 export const getLinkFormIsValid = (state: StateType) => state.workspace.linkFormIsValid;
+export const getWrapperPosition = (state: StateType) => state.workspace.wrapperPosition;
+
 
 

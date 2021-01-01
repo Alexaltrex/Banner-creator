@@ -35,6 +35,8 @@ const useHeader = () => {
         dispatch(editorAC.setSecondarySidebarBackgroundTabIndex(0));
         dispatch(editorAC.setImageTabIndex(0));
         dispatch(editorAC.setBorderColor('#000'));
+        dispatch(editorAC.setColorStart('#000'));
+        dispatch(editorAC.setColorEnd('#FFF'));
     };
     return {
         classes, logo, createNewLabel, onCreateNewHandler

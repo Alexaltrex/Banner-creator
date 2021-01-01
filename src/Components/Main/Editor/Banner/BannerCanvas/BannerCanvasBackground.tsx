@@ -10,6 +10,7 @@ import {
 } from "../../../../../Store/selectors/editor-selectors";
 import {getZoom} from "../../../../../Store/selectors/workspace-selectors";
 import {editorAC} from "../../../../../Store/reducers/editor-reducer";
+import {workspaceAC} from "../../../../../Store/reducers/workspace-reducer";
 
 //============ CUSTOM HOOK ====================
 const useBannerCanvasBackground = () => {
@@ -27,6 +28,20 @@ const useBannerCanvasBackground = () => {
     let canvasRef = useRef<HTMLCanvasElement | null>(null);
     let canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
     const dispatch = useDispatch();
+
+
+    useEffect(() => {
+        console.log('test')
+        if (canvasRef && canvasRef.current) {
+            // @ts-ignore
+            const wrapper: DOMRect = canvasRef.current.getBoundingClientRect();
+            const x = wrapper.left;
+            const y = wrapper.top;
+            dispatch(workspaceAC.setWrapperPosition(x, y));
+
+            console.log(x, y)
+        }
+    }, [canvasRef])
 
     useEffect(() => {
         if (canvasRef.current && size.width && size.height) {
@@ -50,7 +65,8 @@ const useBannerCanvasBackground = () => {
                         size.width / 2, size.height / 2, 0,
                         size.width / 2, size.height / 2, Math.sqrt((size.width * size.width) + (size.height * size.height)) / 2
                     );
-                };
+                }
+                ;
                 ctx!.clearRect(0, 0, size.width, size.height);
                 gradient.addColorStop(0, colorStart);
                 gradient.addColorStop(1, colorEnd);
@@ -253,6 +269,7 @@ const useBannerCanvasBackground = () => {
         gradientStyle, colorStart, colorEnd, currentImage,
         scaleMode, align, dispatch
     ]);
+
     return {
         classes, size, canvasRef, zoom
     }

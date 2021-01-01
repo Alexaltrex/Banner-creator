@@ -60,5 +60,4 @@ export type TextType = {
     selected: boolean
     editParameters: boolean
     editText: boolean
-
 }

@@ -115,6 +115,7 @@ const useStylesForm = makeStyles({
         left: 0,
         backgroundColor: blue[50],
         padding: 0,
+        border: 0
     }),
     hide: {
         display: 'none'

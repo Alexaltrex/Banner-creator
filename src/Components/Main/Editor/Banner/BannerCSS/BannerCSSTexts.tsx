@@ -1,14 +1,13 @@
 import React, {ReactElement} from "react";
 import {useSelector} from "react-redux";
 import {getTexts} from "../../../../../Store/selectors/text-selectors";
-import BannerCSSText from "./BannerCSSText";
-
+import BannerCSSTextNative from "./BannerCSSTextNative";
 
 //============ CUSTOM HOOK ====================
 const useBannerTexts = () => {
     const texts = useSelector(getTexts);
     const textElements = texts.map(
-        el => <BannerCSSText key={el.id} text={el}/>
+        el => <BannerCSSTextNative key={el.id} text={el}/>
     );
     return {
         textElements

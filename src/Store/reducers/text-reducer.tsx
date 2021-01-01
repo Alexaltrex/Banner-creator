@@ -6,7 +6,12 @@ import {XYCoord} from "react-dnd";
 const initialState = {
     texts: [] as Array<TextType>,
     selectedTextId: null as null | number, // id выделенного текста
-    showAlarm: false // показывать сообщение о предельно допустимом количестве строк текста
+    movedTextId: null as null | number, // id перетаскиваемого текста
+    showAlarm: false, // показывать сообщение о предельно допустимом количестве строк текста
+    cursorOnTextPosition: {
+        x: 0,
+        y: 0
+    }
 };
 
 //=================== REDUCER ===========================
@@ -164,8 +169,8 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
                             return ({
                                 ...el,
                                 position: {
-                                    top: el.position.top + action.difference.y,
-                                    left: el.position.left + action.difference.x
+                                    top: action.y,
+                                    left: action.x
                                 }
                             })
                         }
@@ -246,6 +251,11 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
                 ...state, selectedTextId: action.selectedTextId
             }
         }
+        case 'BANNER_CREATOR/TEXT/SET_MOVED_TEXT_ID': {
+            return {
+                ...state, movedTextId: action.movedTextId
+            }
+        }
         case 'BANNER_CREATOR/TEXT/REMOVE_TEXT': {
             return {
                 ...state,
@@ -259,6 +269,15 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
         }
         case 'BANNER_CREATOR/TEXT/SET_SHOW_ALARM': {
             return {...state, showAlarm: action.showAlarm}
+        }
+        case 'BANNER_CREATOR/TEXT/SET_CURSOR_ON_TEXT_POSITION': {
+            return {
+                ...state,
+                cursorOnTextPosition: {
+                    x: action.x,
+                    y: action.y
+                }
+            }
         }
         default:
             return state;
@@ -274,16 +293,53 @@ export const textAC = {
     setHover: (id: number, hover: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_HOVER', id, hover} as const),
     setSelected: (id: number, selected: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_SELECTED', id, selected} as const),
     setFontSize: (id: number, fontSize: number) => ({type: 'BANNER_CREATOR/TEXT/SET_FONT_SIZE', id, fontSize} as const),
-    setFontStyle: (id: number, fontStyle: 'normal' | 'italic') => ({type: 'BANNER_CREATOR/TEXT/SET_FONT_STYLE', id, fontStyle} as const),
-    setLowerCase: (id: number, lowerCase: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_LOWER_CASE', id, lowerCase} as const),
-    setUpperCase: (id: number, upperCase: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_UPPER_CASE', id, upperCase} as const),
-    setPosition: (id: number, difference: XYCoord) => ({type: 'BANNER_CREATOR/TEXT/SET_POSITION', id, difference} as const),
+    setFontStyle: (id: number, fontStyle: 'normal' | 'italic') => ({
+        type: 'BANNER_CREATOR/TEXT/SET_FONT_STYLE',
+        id,
+        fontStyle
+    } as const),
+    setLowerCase: (id: number, lowerCase: boolean) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_LOWER_CASE',
+        id,
+        lowerCase
+    } as const),
+    setUpperCase: (id: number, upperCase: boolean) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_UPPER_CASE',
+        id,
+        upperCase
+    } as const),
+    setPosition: (id: number, x: number, y: number) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_POSITION',
+        id,
+        x,
+        y
+    } as const),
     setColor: (id: number, color: string) => ({type: 'BANNER_CREATOR/TEXT/SET_COLOR', id, color} as const),
     setContent: (id: number, content: string) => ({type: 'BANNER_CREATOR/TEXT/SET_CONTENT', id, content} as const),
-    setEditParameters: (id: number, editParameters: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_EDIT_PARAMETERS', id, editParameters} as const),
-    setEditText: (id: number, editText: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_EDIT_TEXT', id, editText} as const),
-    setSelectedTextId: (selectedTextId: number) => ({type: 'BANNER_CREATOR/TEXT/SET_SELECTED_TEXT_ID', selectedTextId} as const),
+    setEditParameters: (id: number, editParameters: boolean) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_EDIT_PARAMETERS',
+        id,
+        editParameters
+    } as const),
+    setEditText: (id: number, editText: boolean) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_EDIT_TEXT',
+        id,
+        editText
+    } as const),
+    setSelectedTextId: (selectedTextId: number) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_SELECTED_TEXT_ID',
+        selectedTextId
+    } as const),
+    setMovedTextId: (movedTextId: number | null) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_MOVED_TEXT_ID',
+        movedTextId
+    } as const),
     setShowAlarm: (showAlarm: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_SHOW_ALARM', showAlarm} as const),
+    setCursorOnTextPosition: (x: number, y: number) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_CURSOR_ON_TEXT_POSITION',
+        x,
+        y
+    } as const)
 };
 
 //============== TYPE ==================
