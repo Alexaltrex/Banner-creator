@@ -1,111 +1,73 @@
-import React from "react";
+import React, {useEffect, useRef, useState} from "react";
 import makeStyles from "@material-ui/core/styles/makeStyles";
-import {Field, InjectedFormProps, reduxForm, submit} from "redux-form";
-import {useDispatch, useSelector} from "react-redux";
-import {textAC} from "../../../../../Store/reducers/text-reducer";
 import {TextType} from "../../../../../Types/types";
-import blue from "@material-ui/core/colors/blue";
+import {useDispatch, useSelector} from "react-redux";
 import {getZoom} from "../../../../../Store/selectors/workspace-selectors";
+import {textAC} from "../../../../../Store/reducers/text-reducer";
 
-//================= CUSTOM FORM HOOK =========================
-const useForm = (text: TextType) => {
-    const dispatch = useDispatch();
-    const onChangeHandler = () => {
-        setTimeout(() => dispatch(submit('text-form')));
-    };
+//================CUSTOM COMPONENT HOOK ==========
+const useBannerTextFormNative = (text: TextType) => {
     const zoom = useSelector(getZoom);
-    const onBlurHandler = () => {
-        dispatch(textAC.setEditText(text.id, false));
-    };
+    const dispatch = useDispatch();
     const props = {
         text: text,
         zoom: zoom
     };
-    const classes = useStylesForm(props);
-    return {
-        onChangeHandler, classes, onBlurHandler,
-    }
-};
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [inputValue, setInputValue] = useState(text.content);
 
-//========================== FORM =======================================
-const Form: React.FC<FormPropsType> = ({handleSubmit, text}) => {
+
+    const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setInputValue(e.target.value);
+    };
+    const onBlurHandler = () => {
+        dispatch(textAC.setContent(text.id, inputValue));
+        dispatch(textAC.setEditText(text.id, false));
+    };
+
+    const classes = useStylesForm(props);
+
+    useEffect(() => {
+        // @ts-ignore
+        inputRef.current.size = inputRef.current.value.length +1;
+    }, [inputValue]);
+
+    return {
+        classes, onChangeHandler, inputValue, onBlurHandler,
+        inputRef
+    }
+}
+
+//==================== COMPONENT =================
+const BannerTextForm: React.FC<PropsType> = ({text}) => {
     const {
-        onChangeHandler, classes, onBlurHandler,
-    } = useForm(text);
+        classes, onChangeHandler, inputValue, onBlurHandler,
+        inputRef
+    } = useBannerTextFormNative(text);
     return (
-        <form onSubmit={handleSubmit}
-              className={classes.form}
-        >
-            <Field name='text'
-                   component='input'
-                   type="text"
+        <div className={classes.form}>
+            <input type="text"
+                   ref={inputRef}
                    autoFocus={true}
                    className={classes.field}
                    onChange={onChangeHandler}
+                   value={inputValue}
                    onBlur={onBlurHandler}
             />
-        </form>
-    )
-};
-
-//================================== REDUX-FORM ======================================
-const ReduxForm = reduxForm<FormParamsType, FormOwnPropsType>({
-    form: 'text-form',
-})(Form);
-
-//======================== CUSTOM COMPONENT HOOK =========================
-const useBannerTextForm = (id: number, content: string) => {
-    const dispatch = useDispatch();
-    const onSubmitHandler = (value: FormParamsType) => {
-        dispatch(textAC.setContent(id, value.text));
-    };
-    const initialValues = {
-        text: content
-    };
-    return {
-        onSubmitHandler, initialValues
-    }
-};
-
-//========================= COMPONENT =======================
-const BannerTextForm: React.FC<ComponentPropsType> = ({text}) => {
-    const {
-        onSubmitHandler, initialValues
-    } = useBannerTextForm(text.id, text.content);
-    return (
-        <>
-            <ReduxForm onSubmit={onSubmitHandler}
-                       text={text}
-                       initialValues={initialValues}
-            />
-        </>
+        </div>
     )
 };
 export default BannerTextForm;
 
-//=================== TYPE ==============
-type FormPropsType =
-    InjectedFormProps<FormParamsType, FormOwnPropsType>
-    & FormOwnPropsType;
-type FormParamsType = {
-    text: string
-}
-type FormOwnPropsType = {
-    text: TextType
-};
-type ComponentPropsType = {
-    text: TextType
-}
-
 //================= STYLES ================
 const useStylesForm = makeStyles({
-    form: (props: {text: TextType, zoom: number}) => ({
+    form: (props: { text: TextType, zoom: number }) => ({
         zIndex: 10,
         position: 'absolute',
-        top: props.text.position.top * props.zoom / 100,
-        left: props.text.position.left * props.zoom / 100,
+        top: 0,
+        left: 0
     }),
-    field: (props: {text: TextType, zoom: number}) => ({
+    field: (props: { text: TextType, zoom: number }) => ({
         position: 'absolute',
         fontSize: props.text.fontSize * props.zoom / 100,
         fontFamily: props.text.fontFamily,
@@ -113,11 +75,20 @@ const useStylesForm = makeStyles({
         color: props.text.color,
         top: 0,
         left: 0,
-        backgroundColor: blue[50],
+        backgroundColor: 'red',//'rgba(227, 242, 253, 0.9)',
         padding: 0,
-        border: 0
+        border: 'none',
+        height: `${props.text.fontSize * props.zoom / 100}px`,
+        '&:focus': {
+            outline: 'none'
+        }
     }),
     hide: {
         display: 'none'
     }
 });
+
+//=================== TYPE ==============
+type PropsType = {
+    text: TextType
+}

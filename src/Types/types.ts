@@ -46,9 +46,13 @@ export type elementType = 'header' | 'subheader' | 'body'
 export type TextType = {
     id: number
     content: string
-    position: {
+    position: { // координаты левого верхнего угла текста относительно левого верхнего угла канваса
         top: number
         left: number
+    }
+    size: {
+        width: number
+        height: number
     }
     fontSize: number
     fontStyle: 'normal' | 'italic'
@@ -60,4 +64,5 @@ export type TextType = {
     selected: boolean
     editParameters: boolean
     editText: boolean
+    angle: number // угол в градусах
 }

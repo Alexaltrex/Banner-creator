@@ -5,8 +5,10 @@ const initialState = {
     zoom: 100 as ZoomType, // масштаб рабочей области
     downloadCase: 'PNG' as DownloadCaseType, // сохранить как
     jpegQuality: 0.8, // качество jpeg изображения
-    refLeftPanel: null as null | React.MutableRefObject<null>,
-    wrapperPosition: {
+    refLeftPanel: null as null | React.MutableRefObject<null>, // ссылка на контекстную панель
+    refToolbar: null as null | React.MutableRefObject<null>, // ссылка на верхнюю панель инструментов
+    refCanvas: null as null | React.MutableRefObject<null>, // ссылка на канвас заднего фона
+    wrapperPosition: { // координаты левого верхнего угла канваса
         x: 0,
         y: 0
     },
@@ -23,8 +25,14 @@ const workspaceReducer = (state = initialState, action: WorkspaceActionsType): I
         case 'BANNER_CREATOR/WORKSPACE/SET_ZOOM': {
             return {...state, zoom: action.zoom}
         }
-        case 'BANNER_CREATOR/WORKSPACE/SET_REF': {
+        case 'BANNER_CREATOR/WORKSPACE/SET_REF_LEFT_PANEL': {
             return {...state, refLeftPanel: action.refLeftPanel}
+        }
+        case 'BANNER_CREATOR/WORKSPACE/SET_REF_TOOLBAR': {
+            return {...state, refToolbar: action.refToolbar}
+        }
+        case 'BANNER_CREATOR/WORKSPACE/SET_REF_CANVAS': {
+            return {...state, refCanvas: action.refCanvas}
         }
         case 'BANNER_CREATOR/WORKSPACE/SET_DOWNLOAD_CASE': {
             return {...state, downloadCase: action.downloadCase}
@@ -60,8 +68,16 @@ export default workspaceReducer;
 export const workspaceAC = {
     setZoom: (zoom: ZoomType) => ({type: 'BANNER_CREATOR/WORKSPACE/SET_ZOOM', zoom} as const),
     setRefLeftPanel: (refLeftPanel: null | React.MutableRefObject<null>) => ({
-        type: 'BANNER_CREATOR/WORKSPACE/SET_REF',
+        type: 'BANNER_CREATOR/WORKSPACE/SET_REF_LEFT_PANEL',
         refLeftPanel
+    } as const),
+    setRefToolbar: (refToolbar: null | React.MutableRefObject<null>) => ({
+        type: 'BANNER_CREATOR/WORKSPACE/SET_REF_TOOLBAR',
+        refToolbar
+    } as const),
+    setRefCanvas: (refCanvas: null | React.MutableRefObject<null>) => ({
+        type: 'BANNER_CREATOR/WORKSPACE/SET_REF_CANVAS',
+        refCanvas
     } as const),
     setDownloadCase: (downloadCase: DownloadCaseType) => ({
         type: 'BANNER_CREATOR/WORKSPACE/SET_DOWNLOAD_CASE',

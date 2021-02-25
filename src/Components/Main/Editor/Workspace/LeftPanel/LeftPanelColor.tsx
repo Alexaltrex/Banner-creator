@@ -4,8 +4,7 @@ import {HexColorPicker} from "react-colorful";
 import './../../../../../css/styles.css';
 import Typography from "@material-ui/core/Typography";
 import {useDispatch, useSelector} from "react-redux";
-import {getSelectedTextId, getTexts} from "../../../../../Store/selectors/text-selectors";
-import {TextType} from "../../../../../Types/types";
+import {getSelectedText, getSelectedTextId} from "../../../../../Store/selectors/text-selectors";
 import {translate} from "../../../../../Utils/lang";
 import {getLang} from "../../../../../Store/selectors/app-selectors";
 import grey from "@material-ui/core/colors/grey";
@@ -15,9 +14,9 @@ import {textAC} from "../../../../../Store/reducers/text-reducer";
 const useLeftPanelColor = () => {
     const lang = useSelector(getLang);
     const titleLabel = translate(lang, 'Color')
-    const texts = useSelector(getTexts);
     const selectedTextId = useSelector(getSelectedTextId);
-    const color = (texts.find(el => el.id === selectedTextId) as TextType).color;
+    const selectedText = useSelector(getSelectedText);
+    const color = selectedText.color;
     const dispatch = useDispatch();
     const onChangeHandler = (newColor: string) => {
         dispatch(textAC.setColor(selectedTextId as number, newColor));

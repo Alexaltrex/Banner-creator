@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useRef} from "react";
 import {makeStyles} from "@material-ui/core";
 import {editorToolbarHeight} from "../../../../Utils/CONST";
 import ToolbarZoom from "./ToolbarZoom";
@@ -6,19 +6,35 @@ import ToolbarZoomPlus from "./ToolbarZoomPlus";
 import ToolbarZoomMinus from "./ToolbarZoomMinus";
 import ToolbarDownload from "./ToolbarDownload";
 import DownloadDialog from "./DownloadDialog/DownloadDialog";
+import {useDispatch} from "react-redux";
+import {workspaceAC} from "../../../../Store/reducers/workspace-reducer";
 
 //============ CUSTOM HOOK ====================
 const useEditorToolbar = () => {
     const classes = useStyles();
-    return {classes}
+
+    const refToolbar = useRef(null);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(workspaceAC.setRefToolbar(refToolbar))
+    });
+
+
+    return {
+        classes, refToolbar
+    }
 
 };
 
 //============== COMPONENT =================
 const Toolbar: React.FC<{}> = () => {
-    const {classes} = useEditorToolbar();
+    const {
+        classes, refToolbar
+    } = useEditorToolbar();
     return (
-        <div className={classes.editorToolbar}>
+        <div className={classes.editorToolbar}
+             ref={refToolbar}
+        >
             <div/>
             <div className={classes.centerBlock}>
                 <ToolbarZoomMinus />

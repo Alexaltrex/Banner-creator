@@ -21,6 +21,8 @@ import {editorAC} from "../../../Store/reducers/editor-reducer";
 import {BackgroundStyleColorType, BackgroundStyleType, GradientStyleType, LangType} from "../../../Types/types";
 import {getIsCreated, getLang} from "../../../Store/selectors/app-selectors";
 import {appAC} from "../../../Store/reducers/app-reducer";
+import LeftPanel from "./Workspace/LeftPanel/LeftPanel";
+import {getIsAnyTextEditParameters, getTexts} from "../../../Store/selectors/text-selectors";
 
 //============ CUSTOM HOOK ====================
 const useEditor = () => {
@@ -115,13 +117,18 @@ const useEditor = () => {
         colorEnd
     ]);
 
-    return {classes, showSecondSidebar}
+    const isAnyTextEditParameters = useSelector(getIsAnyTextEditParameters);
+    const leftPanelIsShow = isAnyTextEditParameters;
+
+    return {
+        classes, showSecondSidebar, leftPanelIsShow
+    }
 };
 
 //============== COMPONENT =================
 const Editor: React.FC<{}> = () => {
     const {
-        classes, showSecondSidebar
+        classes, showSecondSidebar, leftPanelIsShow
     } = useEditor();
     return (
         <div className={classes.editor}>
@@ -136,6 +143,9 @@ const Editor: React.FC<{}> = () => {
             <div className={classes.workspace}>
                 <Toolbar/>
                 <Workspace/>
+                {
+                    leftPanelIsShow && <LeftPanel/>
+                }
             </div>
             <Alarm/>
         </div>
@@ -161,7 +171,7 @@ const useStyles = makeStyles({
         flexShrink: 0,
         backgroundColor: brown[600],
         position: 'relative',
-        transition: 'width .3s',
+        //transition: 'width .3s',
         overflow: 'hidden',
         height: 'calc(100vh - 64px)',
     },
@@ -180,6 +190,7 @@ const useStyles = makeStyles({
         height: 'calc(100vh - 64px)',
         backgroundColor: grey[200],
         display: 'flex',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        position: 'relative'
     }
 });

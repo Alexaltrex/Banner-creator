@@ -37,6 +37,7 @@ const useHeader = () => {
         dispatch(editorAC.setBorderColor('#000'));
         dispatch(editorAC.setColorStart('#000'));
         dispatch(editorAC.setColorEnd('#FFF'));
+        dispatch(editorAC.setShowSecondSidebar(true));
     };
     return {
         classes, logo, createNewLabel, onCreateNewHandler

@@ -5,12 +5,13 @@ import {
     getAlign,
     getBackgroundStyle,
     getBackgroundStyleColor, getColorEnd, getColorStart, getCurrentImage,
-    getGradientStyle, getScaleMode,
+    getGradientStyle, getScaleMode, getShowSecondSidebar,
     getSize
 } from "../../../../../Store/selectors/editor-selectors";
 import {getZoom} from "../../../../../Store/selectors/workspace-selectors";
 import {editorAC} from "../../../../../Store/reducers/editor-reducer";
 import {workspaceAC} from "../../../../../Store/reducers/workspace-reducer";
+import throttle from "lodash/throttle";
 
 //============ CUSTOM HOOK ====================
 const useBannerCanvasBackground = () => {
@@ -25,23 +26,41 @@ const useBannerCanvasBackground = () => {
     const scaleMode = useSelector(getScaleMode);
     const align = useSelector(getAlign);
     const zoom = useSelector(getZoom);
+    const showSecondSidebar = useSelector(getShowSecondSidebar)
     let canvasRef = useRef<HTMLCanvasElement | null>(null);
     let canvasCtxRef = React.useRef<CanvasRenderingContext2D | null>(null);
     const dispatch = useDispatch();
 
-
-    useEffect(() => {
-        console.log('test')
+    // корректировка  wrapperPosition при изменении размеров окна
+    const resizeHandler = () => {
         if (canvasRef && canvasRef.current) {
             // @ts-ignore
             const wrapper: DOMRect = canvasRef.current.getBoundingClientRect();
             const x = wrapper.left;
             const y = wrapper.top;
             dispatch(workspaceAC.setWrapperPosition(x, y));
-
-            console.log(x, y)
         }
-    }, [canvasRef])
+    };
+    const resizeHandlerThrottle = throttle(resizeHandler, 1000);
+    useEffect(() => {
+            window.addEventListener("resize", resizeHandlerThrottle, true);
+            return () => {
+                window.removeEventListener("resize", resizeHandlerThrottle, true)
+            }
+        }
+    );
+
+    // определение wrapperPosition
+    useEffect(() => {
+        if (canvasRef && canvasRef.current) {
+            // @ts-ignore
+            const wrapper: DOMRect = canvasRef.current.getBoundingClientRect();
+            const x = wrapper.left;
+            const y = wrapper.top;
+            dispatch(workspaceAC.setWrapperPosition(x, y));
+            //console.log(`x = ${x}`)
+        }
+    }, [canvasRef, zoom, showSecondSidebar]);
 
     useEffect(() => {
         if (canvasRef.current && size.width && size.height) {
@@ -64,9 +83,8 @@ const useBannerCanvasBackground = () => {
                     gradient = ctx!.createRadialGradient(
                         size.width / 2, size.height / 2, 0,
                         size.width / 2, size.height / 2, Math.sqrt((size.width * size.width) + (size.height * size.height)) / 2
-                    );
+                    )
                 }
-                ;
                 ctx!.clearRect(0, 0, size.width, size.height);
                 gradient.addColorStop(0, colorStart);
                 gradient.addColorStop(1, colorEnd);

@@ -32,7 +32,13 @@ const useBannerCanvasTexts = () => {
                 ctx!.fillStyle = texts[i].color;
                 ctx!.font = `${texts[i].fontStyle} ${texts[i].fontSize}px ${texts[i].fontFamily}`;
                 ctx!.textBaseline = 'top';
-                ctx!.fillText(content, texts[i].position.left, texts[i].position.top);
+
+                //////////////////////
+                ctx!.save();
+                ctx!.translate(texts[i].position.left + 0.5 * texts[i].size.width, texts[i].position.top + 0.5 * texts[i].size.height);
+                ctx!.rotate(texts[i].angle * Math.PI /180);
+                ctx!.fillText(content, - 0.5 * texts[i].size.width, - 0.5 * texts[i].size.height);
+                ctx!.restore();
 
             }
 

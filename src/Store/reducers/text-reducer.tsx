@@ -7,10 +7,21 @@ const initialState = {
     texts: [] as Array<TextType>,
     selectedTextId: null as null | number, // id выделенного текста
     movedTextId: null as null | number, // id перетаскиваемого текста
+    rotatedTextId: null as null | number, // id вращаемого текста
     showAlarm: false, // показывать сообщение о предельно допустимом количестве строк текста
+    // смещение точки клика курсора относительно левого верхнего угла выделенного текста
+    // в начале вращения
     cursorOnTextPosition: {
         x: 0,
         y: 0
+    },
+    cursorOnRotatorPosition: { // положение точки клика курсора относительно окна в начале вращения
+        x: 0,
+        y: 0
+    },
+    sizeOfSelectedText: { // размеры выделенного текста
+        width: 0,
+        height: 0
     }
 };
 
@@ -44,29 +55,23 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
                             selected: false,
                             editParameters: false,
                             editText: false,
+                            angle: 0,
+                            size: {
+                                width: 0,
+                                height: 0
+                            }
                         }
                     ]
                 }
             } else {
                 return {...state, showAlarm: true}
             }
-
         }
         case 'BANNER_CREATOR/TEXT/SET_HOVER': {
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                hover: action.hover
-                            })
-                        }
-
-                    }
+                    el => el.id !== action.id ? el : {...el, hover: action.hover}
                 )
             }
         }
@@ -74,17 +79,7 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                selected: action.selected
-                            })
-                        }
-
-                    }
+                    el => el.id !== action.id ? el : {...el, selected: action.selected}
                 )
             }
         }
@@ -92,17 +87,7 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                editParameters: action.editParameters
-                            })
-                        }
-
-                    }
+                    el => el.id !== action.id ? el : {...el, editParameters: action.editParameters}
                 )
             }
         }
@@ -110,17 +95,7 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                editText: action.editText
-                            })
-                        }
-
-                    }
+                    el => el.id !== action.id ? el : {...el, editText: action.editText}
                 )
             }
         }
@@ -128,16 +103,7 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                fontSize: action.fontSize
-                            })
-                        }
-                    }
+                    el => el.id !== action.id ? el : {...el, fontSize: action.fontSize}
                 )
             }
         }
@@ -145,16 +111,7 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                fontStyle: action.fontStyle
-                            })
-                        }
-                    }
+                    el => el.id !== action.id ? el : {...el, fontStyle: action.fontStyle}
                 )
             }
         }
@@ -162,17 +119,10 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                position: {
-                                    top: action.y,
-                                    left: action.x
-                                }
-                            })
+                    el => el.id !== action.id ? el : {
+                        ...el, position: {
+                            top: action.y,
+                            left: action.x
                         }
                     }
                 )
@@ -182,16 +132,16 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                color: action.color
-                            })
-                        }
-                    }
+                    el => el.id !== action.id ? el : {...el, color: action.color}
+                )
+            }
+        }
+        case 'BANNER_CREATOR/TEXT/SET_ANGLE': {
+
+            return {
+                ...state,
+                texts: state.texts.map(
+                    el => el.id !== action.id ? el : {...el, angle: action.angle}
                 )
             }
         }
@@ -199,16 +149,7 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                lowerCase: action.lowerCase
-                            })
-                        }
-                    }
+                    el => el.id !== action.id ? el : {...el, lowerCase: action.lowerCase}
                 )
             }
         }
@@ -216,16 +157,7 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                upperCase: action.upperCase
-                            })
-                        }
-                    }
+                    el => el.id !== action.id ? el : {...el, upperCase: action.upperCase}
                 )
             }
         }
@@ -233,14 +165,18 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
             return {
                 ...state,
                 texts: state.texts.map(
-                    el => {
-                        if (el.id !== action.id) {
-                            return el
-                        } else {
-                            return ({
-                                ...el,
-                                content: action.content
-                            })
+                    el => el.id !== action.id ? el : {...el, content: action.content}
+                )
+            }
+        }
+        case 'BANNER_CREATOR/TEXT/SET_SIZE': {
+            return {
+                ...state,
+                texts: state.texts.map(
+                    el => el.id !== action.id ? el : {
+                        ...el, size: {
+                            width: action.width,
+                            height: action.height
                         }
                     }
                 )
@@ -254,6 +190,11 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
         case 'BANNER_CREATOR/TEXT/SET_MOVED_TEXT_ID': {
             return {
                 ...state, movedTextId: action.movedTextId
+            }
+        }
+        case 'BANNER_CREATOR/TEXT/SET_ROTATED_TEXT_ID': {
+            return {
+                ...state, rotatedTextId: action.rotatedTextId
             }
         }
         case 'BANNER_CREATOR/TEXT/REMOVE_TEXT': {
@@ -279,6 +220,17 @@ const textReducer = (state = initialState, action: textActionsType): InitialStat
                 }
             }
         }
+        case 'BANNER_CREATOR/TEXT/SET_SIZE_OF_SELECTED_TEXT': {
+            return {
+                ...state, sizeOfSelectedText: {
+                    width: action.width,
+                    height: action.height
+                }
+            }
+        }
+        case 'BANNER_CREATOR/TEXT/SET_CURSOR_ON_ROTATOR_POSITION': {
+            return {...state, cursorOnRotatorPosition: {x: action.x, y: action.y}}
+        }
         default:
             return state;
     }
@@ -293,6 +245,7 @@ export const textAC = {
     setHover: (id: number, hover: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_HOVER', id, hover} as const),
     setSelected: (id: number, selected: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_SELECTED', id, selected} as const),
     setFontSize: (id: number, fontSize: number) => ({type: 'BANNER_CREATOR/TEXT/SET_FONT_SIZE', id, fontSize} as const),
+    setAngle: (id: number, angle: number) => ({type: 'BANNER_CREATOR/TEXT/SET_ANGLE', id, angle} as const),
     setFontStyle: (id: number, fontStyle: 'normal' | 'italic') => ({
         type: 'BANNER_CREATOR/TEXT/SET_FONT_STYLE',
         id,
@@ -316,6 +269,12 @@ export const textAC = {
     } as const),
     setColor: (id: number, color: string) => ({type: 'BANNER_CREATOR/TEXT/SET_COLOR', id, color} as const),
     setContent: (id: number, content: string) => ({type: 'BANNER_CREATOR/TEXT/SET_CONTENT', id, content} as const),
+    setSize: (id: number, width: number, height: number) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_SIZE',
+        id,
+        width,
+        height
+    } as const),
     setEditParameters: (id: number, editParameters: boolean) => ({
         type: 'BANNER_CREATOR/TEXT/SET_EDIT_PARAMETERS',
         id,
@@ -330,6 +289,10 @@ export const textAC = {
         type: 'BANNER_CREATOR/TEXT/SET_SELECTED_TEXT_ID',
         selectedTextId
     } as const),
+    setRotatedTextId: (rotatedTextId: number | null) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_ROTATED_TEXT_ID',
+        rotatedTextId
+    } as const),
     setMovedTextId: (movedTextId: number | null) => ({
         type: 'BANNER_CREATOR/TEXT/SET_MOVED_TEXT_ID',
         movedTextId
@@ -337,8 +300,16 @@ export const textAC = {
     setShowAlarm: (showAlarm: boolean) => ({type: 'BANNER_CREATOR/TEXT/SET_SHOW_ALARM', showAlarm} as const),
     setCursorOnTextPosition: (x: number, y: number) => ({
         type: 'BANNER_CREATOR/TEXT/SET_CURSOR_ON_TEXT_POSITION',
-        x,
-        y
+        x, y
+    } as const),
+    setSizeOfSelectedText: (width: number, height: number) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_SIZE_OF_SELECTED_TEXT',
+        width,
+        height
+    } as const),
+    setCursorOnRotatorPosition: (x: number, y: number) => ({
+        type: 'BANNER_CREATOR/TEXT/SET_CURSOR_ON_ROTATOR_POSITION',
+        x, y
     } as const)
 };
 

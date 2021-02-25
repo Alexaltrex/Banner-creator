@@ -6,8 +6,7 @@ import grey from "@material-ui/core/colors/grey";
 import {getLang} from "../../../../../../Store/selectors/app-selectors";
 import {useDispatch, useSelector} from "react-redux";
 import {translate} from "../../../../../../Utils/lang";
-import {getSelectedTextId, getTexts} from "../../../../../../Store/selectors/text-selectors";
-import {TextType} from "../../../../../../Types/types";
+import {getSelectedText, getSelectedTextId} from "../../../../../../Store/selectors/text-selectors";
 import {textAC} from "../../../../../../Store/reducers/text-reducer";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -21,12 +20,12 @@ const useLeftPanelText = () => {
     const lang = useSelector(getLang);
     const textLabel = translate(lang, 'Text');
     const fontSizeLabel = translate(lang, 'Font size (px)');
-    const texts = useSelector(getTexts);
+    const selectedText = useSelector(getSelectedText);
     const selectedTextId = useSelector(getSelectedTextId);
-    const value = (texts.find(el => el.id === selectedTextId) as TextType).fontSize;
-    const fontStyle = (texts.find(el => el.id === selectedTextId) as TextType).fontStyle;
-    const lowerCase = (texts.find(el => el.id === selectedTextId) as TextType).lowerCase;
-    const upperCase = (texts.find(el => el.id === selectedTextId) as TextType).upperCase;
+    const value = selectedText.fontSize;
+    const fontStyle = selectedText.fontStyle;
+    const lowerCase = selectedText.lowerCase;
+    const upperCase = selectedText.upperCase;
     const dispatch = useDispatch();
     const handleChange = (e: any, value: number | number[]) => {
         dispatch(textAC.setFontSize(selectedTextId as number, value as number));

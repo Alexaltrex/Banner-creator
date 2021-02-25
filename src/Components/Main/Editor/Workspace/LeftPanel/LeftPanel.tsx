@@ -35,12 +35,13 @@ const useLeftPanel = () => {
         setLeftPanelIndex(2);
         dispatch(textAC.removeText(selectedTextId))
     };
-    const refLeftPanel = useRef(null);
 
+    const refLeftPanel = useRef(null);
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(workspaceAC.setRefLeftPanel(refLeftPanel))
     });
+
     const lang = useSelector(getLang);
     const textLabel = translate(lang, 'Text');
     const colorLabel = translate(lang, 'Color');
@@ -134,7 +135,7 @@ const useStyles = makeStyles({
     leftPanel: {
         padding: 0,
         position: 'absolute',
-        top: 10,
+        top: 60,
         left: 10,
         display: 'flex',
         alignItems: 'flex-start'

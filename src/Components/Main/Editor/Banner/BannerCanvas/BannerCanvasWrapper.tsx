@@ -8,7 +8,10 @@ import BannerCSSTexts from "../BannerCSS/BannerCSSTexts";
 import BannerCanvasBackgroundMemo from "./BannerCanvasBackground";
 import BannerCanvasBorderMemo from "./BannerCanvasBorder";
 import throttle from "lodash/throttle";
-import {getCursorOnTextPosition, getMovedTextId} from "../../../../../Store/selectors/text-selectors";
+import {
+    getCursorOnTextPosition,
+    getMovedTextId,
+} from "../../../../../Store/selectors/text-selectors";
 import {textAC} from "../../../../../Store/reducers/text-reducer";
 import BannerCanvasTextsMemo from "./BannerCanvasTexts";
 
@@ -29,21 +32,21 @@ const useBannerCanvasWrapper = () => {
     const wrapperPosition = useSelector(getWrapperPosition);
     const cursorOnTextPosition = useSelector(getCursorOnTextPosition);
     const movedTextId = useSelector(getMovedTextId);
+
     const onMouseMoveHandler = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        if (movedTextId) {
-            const cursorX = e.clientX;
+        if (movedTextId) { // режим перемещения текста
+            const cursorX = e.clientX; // координаты курсора относительно окна
             const cursorY = e.clientY;
-            const wrapperX = wrapperPosition.x;
+            const wrapperX = wrapperPosition.x; // координаты левого верхнего угла канваса относительно окна
             const wrapperY = wrapperPosition.y;
-            const cursorOnTextPositionX = cursorOnTextPosition.x;
+            const cursorOnTextPositionX = cursorOnTextPosition.x; // смещение курсора относительно левого верхнего угла текста
             const cursorOnTextPositionY = cursorOnTextPosition.y;
-            const x = cursorX - wrapperX - cursorOnTextPositionX;
-            const y = cursorY - wrapperY - cursorOnTextPositionY;
+            const x = (cursorX - wrapperX - cursorOnTextPositionX) * 100 / zoom; // коорд. левого верхего угла текста относительно
+            const y = (cursorY - wrapperY - cursorOnTextPositionY) * 100 / zoom; // левого верхего угла канваса
             dispatch(textAC.setPosition(movedTextId, x, y));
         }
     };
-
-    const onMouseMoveThrottle = throttle(onMouseMoveHandler, 1500);
+    const onMouseMoveThrottle = throttle(onMouseMoveHandler, 500);
 
     return {
         size, useBorder, zoom, ref, onMouseMoveThrottle
@@ -55,6 +58,8 @@ const BannerCanvasWrapper: React.FC<{}> = () => {
     const {
         size, useBorder, zoom, ref, onMouseMoveThrottle
     } = useBannerCanvasWrapper();
+    // BannerCSSTexts - отображается в приложении
+    // BannerCanvasTextsMemo - выводится в файл
     return (
         <Div width={size.width}
              height={size.height}
@@ -67,7 +72,7 @@ const BannerCanvasWrapper: React.FC<{}> = () => {
                 useBorder &&
                 <BannerCanvasBorderMemo/>
             }
-            <BannerCanvasTextsMemo />
+            <BannerCanvasTextsMemo/>
             <BannerCSSTexts/>
 
         </Div>
